@@ -1,0 +1,32 @@
+{% load static %} <!-- Загружаем шаблонный тег static для использования статических файлов -->
+
+<footer class="footer"> <!-- Контейнер для подвала страницы -->
+    <div class="footer-content"> <!-- Основное содержимое подвала -->
+        <div class="footer-logo"> <!-- Контейнер для логотипа в подвале -->
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo"> <!-- Логотип сайта -->
+            <p class="footer-txt">ORLAN BLOG</p> <!-- Текст логотипа -->
+        </div>
+        <div class="footer-links"> <!-- Контейнер для ссылок в подвале -->
+            <a href="#" class="footer-link">Main Page</a> <!-- Ссылка на основную страницу -->
+            <a href="#" class="footer-link">About us</a> <!-- Ссылка на страницу о компании -->
+            <a href="#" class="footer-link">Contacts</a> <!-- Ссылка на страницу контактов -->
+            <a href="#" class="footer-link">Info</a> <!-- Ссылка на страницу информации -->
+        </div>
+        <div class="footer-contact"> <!-- Контейнер для контактной информации -->
+            <p>Addres: Aytakow street, Ashgabat, Turkmenistan</p> <!-- Адрес компании -->
+            <p>Telefon: +99371727374</p> <!-- Телефонный номер компании -->
+            <p>Email: orlanblog@gmail.com</p> <!-- Электронная почта компании -->
+        </div>
+        <div class="footer-social"> <!-- Контейнер для ссылок на социальные сети -->
+            <p>Socila Media:</p> <!-- Заголовок для раздела социальных сетей -->
+            <a href="#" class="social-link">Facebook</a> <!-- Ссылка на страницу Facebook -->
+            <a href="#" class="social-link">Linkedin</a> <!-- Ссылка на страницу LinkedIn -->
+            <a href="#" class="social-link">Instagram</a> <!-- Ссылка на страницу Instagram -->
+        </div>
+    </div>
+    <div class="footer-bottom"> <!-- Нижняя часть подвала -->
+        <p>&copy; 2024 ORLAN BLOG. All Rights Reserved.</p> <!-- Авторские права и текст для подвала -->
+    </div>
+</footer>
+
+

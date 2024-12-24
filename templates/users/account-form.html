@@ -1,0 +1,28 @@
+{% extends 'global/main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="form-container">
+    <form action="" method="POST" class="custom-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1>Account Form</h1>
+        {% if messages %}
+            {% for message in messages %}
+                <p class="error-msg">{{message}}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% for field in form %}
+            <div class="form-group">
+                {{field}}
+
+                {% for error in field.errors %}
+                    <p style="color: red">{{error}}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        <input type="submit" value="Confirm">
+    </form>
+</div>
+{% endblock %}

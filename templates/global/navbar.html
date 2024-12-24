@@ -1,0 +1,40 @@
+{% load static %}
+
+<div class="navbar">
+    <div class="menu-toggle" id="menu-toggle">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+    <div class="logo-container">
+        <a href="{% url 'blogs' %}" class="logo-link">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+            <p class="logo-txt">ORLAN BLOG</p>
+        </a>
+    </div>
+    <div class="user-icon-container">
+       {% if request.user.is_authenticated %}
+       <a href="{% url 'account' %}" class="user-icon-link">
+            <img src="{{request.user.profile.profile_image.url}}" alt="User Icon" class="user-icon">
+       </a> 
+       {% else %}
+       <a href="{% url 'account' %}" class="user-icon-link">
+            <img src="{% static 'images/user-icon.png' %}" alt="User Icon" class="user-icon">
+       </a>
+       {% endif %}
+    </div>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-close" id="sidebar-close">&times;</div>
+
+
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'account' %}" class="sidebar-link">Profile</a>
+    <a href="{% url 'user-favorites' %}" class="sidebar-link">Favorites</a>
+    <br>
+    <a href="{% url 'logout' %}" class="sidebar-link">Log out</a>
+    {% else %}
+    <a href="{% url 'login' %}" class="sidebar-link">Profile</a>
+    {% endif %}
+</div>

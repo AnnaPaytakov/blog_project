@@ -1,0 +1,42 @@
+{% extends 'global/main.html' %}
+{% load static %}
+{% block content %}
+<div class="product-container">
+    <div class="product-image">
+        <img src="{{blog.blog_image.url}}" alt="{{blog.title}}">
+
+        <button id="favorite-btn" data-id="{{blog.id}}" class="heart-button">
+            <span id="heart-icon" class="{% if status %}filled{% endif %}">
+                &#9825;
+            </span>
+        </button>
+        
+    </div>
+    <div class="product-details">
+        <h1>{{blog.title}}</h1>
+        <p><span>Content: </span>{{blog.content}}</p>
+        <p><span>Created: </span>{{blog.created_at}}</p>
+        <p><span>Author: </span>{{blog.author.firstname}} {{blog.author.lastname}}</p>
+        <br>
+        <hr>
+        <br>
+        {% if blog.author == request.user.profile %}
+        <a href="{% url 'account' %}" class="card-link">
+            <p class="card-text card-link1">
+                <strong>Author:</strong> {{blog.author.firstname}} {{blog.author.lastname}}<br>
+            </p>
+        </a>
+        {% else %}
+        <a href="{% url 'profile' blog.author.id %}" class="card-link">
+            <p class="card-text card-link1">
+                <strong>Author:</strong> {{blog.author.firstname}} {{blog.author.lastname}}<br>
+            </p>
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block for_script %}
+<script src="{% static 'js/favorites.js' %}"></script>
+{% endblock %}
