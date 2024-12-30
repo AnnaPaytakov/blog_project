@@ -1,30 +1,54 @@
 from django.shortcuts import render, redirect
-from .models import Post, Favorite
+from .models import Post, Favorite, Comment, Category
 from .forms import BlogForm
+from .forms import CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
+from django.db.models import Q
 
 def blogs(request):
     q_name = request.GET.get('q_name')
+    q_category = request.GET.get('q_category')
     all_blogs= Post.objects.all()
 
     if q_name:
         all_blogs = all_blogs.filter(title__icontains=q_name)
+
+    if q_category:
+        all_blogs = all_blogs.filter(category__name=q_category)
     
+    categories = Category.objects.all()
+
     context = {
         'all_blogs': all_blogs,
+        'categories': categories,
     }
     return render(request, 'blogs/blogs.html', context)
 
 def blog(request, pk):
-    blog = Post.objects.get(id=pk)
+    blog = Post.objects.get(id=pk) 
+    comments = blog.comments.all()
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.blog = blog
+            comment.author = request.user.profile
+            comment.save()
+            return redirect('blog', pk=blog.pk)
+    else:
+        form = CommentForm()
+
     status = False
     if request.user.is_authenticated:
         status = Favorite.objects.filter(user=request.user, blog=blog).exists()
     context = {
         'blog':blog,
         'status':status,
+        'comments': comments,
+        'form':form,
         }
     return render(request, 'blogs/blog.html', context)
 
@@ -92,3 +116,4 @@ def delete_blog(request, pk):
         'blog':blog,
     }
     return render(request, 'blogs/delete-blog.html', context)
+

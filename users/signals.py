@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from .models import Profile
-
 from django.db.models.signals import post_delete, post_save
+
 
 def new_user_created(sender, instance, created, **kwargs):
     if created:
@@ -11,6 +11,7 @@ def new_user_created(sender, instance, created, **kwargs):
             username=new_user.username,
             firstname = new_user.first_name,
             lastname = new_user.last_name,
+            email = new_user.email,
         )
     else:
         try:

@@ -3,14 +3,31 @@
 {% block content %}
 
 <div class="container">
-
     <form method="GET" action="" class="search-form">
         <div class="form-group">
-            <input type="text" name="q_name" placeholder="Search" value="{{ request.GET.q_name}}" class="search-input">
+            <select name="q_category" class="search-select">
+                <option value="">Category</option>
+                {% for category in categories %}
+                <option value="{{category.name}}" {% if request.GET.q_category == category.name %}selected{% endif %}>
+                    {{category.name}}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="text" name="q_name" placeholder="Search for something..." value="{{ request.GET.q_name}}" class="search-input">
         </div>
         <button type="submit" class="search-button">Go</button>
         <a href="{% url 'blogs' %}" class="cancel-button">Clear</a>
     </form>
+
+    <!-- <form method="GET" action="" class="search-form">
+        <div class="form-group">
+            <input type="text" name="q_name" placeholder="Search for something..." value="{{ request.GET.q_name}}" class="search-input">
+        </div>
+        <button type="submit" class="search-button">Go</button>
+        <a href="{% url 'blogs' %}" class="cancel-button">Clear</a>
+    </form> -->
 
     <div class="product-grid">
         {% for blog in all_blogs %}
@@ -26,11 +43,13 @@
                         <p class="card-link">{{blog.title}}</p>
                     </h5>
                     <p class="card-text">
-                        <strong>content:</strong> {{blog.content|truncatewords:5}}<br>
-                        <strong>Created:</strong> {{blog.created_at}}   
+                        <strong></strong> {{blog.content|truncatewords:10}}<br>
+                        <br>
                     </p>
+                    <p class="card-created_at">
+                        <strong></strong> {{blog.created_at}}
+                    </p> 
                 </a>
-                
             </div>
         </div>
         {% endfor %}

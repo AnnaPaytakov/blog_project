@@ -16,10 +16,11 @@ body {
 
 /* НАЧАЛО СТИЛЕЙ НАВИГАЦИОННОЙ ПАНЕЛИ */
 .navbar {
+    background-color: #091E3E !important;
     display: flex; /* Использование flexbox для выравнивания элементов */
     align-items: center; /* Вертикальное выравнивание по центру */
     height: 60px; /* Высота навигационной панели */
-    border-bottom: 1px solid #818080; /* Нижняя граница навигационной панели */
+    border-bottom: 1px solid black; /* Нижняя граница навигационной панели */
     padding: 0 20px; /* Внутренний отступ по горизонтали */
     position: relative; /* Относительное позиционирование для использования в дочерних элементах */
 }
@@ -41,9 +42,9 @@ body {
 }
 
 .logo-txt {
-    font-size: 24px; /* Размер текста логотипа */
-    color: #6236f4; /* Цвет текста логотипа */
-    font-weight: bold; /* Жирный шрифт для текста логотипа */
+    font-size: 40px; /* Размер текста логотипа */
+    color: white; /* Цвет текста логотипа */
+    font-weight: lighter; /* Жирный шрифт для текста логотипа */
 }
 
 .nav-link {
@@ -76,7 +77,7 @@ body {
 .menu-toggle .bar {
     width: 25px; /* Ширина полоски */
     height: 3px; /* Высота полоски */
-    background-color: #6236f4; /* Цвет полоски */
+    background-color: white; /* Цвет полоски */
     margin: 3px 0; /* Отступ между полосками */
 }
 
@@ -87,7 +88,7 @@ body {
     left: -250px; /* Панель скрыта по умолчанию (выходит за границы экрана) */
     width: 250px; /* Ширина боковой панели */
     height: 100%; /* Высота боковой панели на всю страницу */
-    background-color: #6236f4; /* Цвет фона боковой панели */
+    background-color: #091E3E !important; /* Цвет фона боковой панели */
     color: #fff; /* Цвет текста боковой панели */
     transition: left 0.3s ease; /* Плавное появление боковой панели */
     padding: 20px; /* Внутренний отступ боковой панели */
@@ -174,14 +175,13 @@ body {
     flex: 1 1 30%; /* Элемент занимает 30% ширины контейнера */
     background-color: white; /* Белый фон для блока */
     padding: 15px; /* Внутренние отступы внутри блока */
-    border-radius: 10px; /* Закругленные углы блока */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень блока */
 }
 
 /* Стили для карточки профиля */
 .profile-card {
     flex: 1 1 100%; /* Элемент занимает полную ширину контейнера */
-    background-color: white; /* Белый фон для карточки */
+    background: white; /* Белый фон для карточки */
     padding: 15px; /* Внутренние отступы внутри карточки */
     border-radius: 10px; /* Закругленные углы карточки */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень карточки */
@@ -223,17 +223,20 @@ body {
 
 /* Стили для информации профиля */
 .profile-info {
-    flex: 1; /* Элемент занимает оставшееся пространство */
+    flex: 1;
+    color: black; /* Элемент занимает оставшееся пространство */
 }
 
 /* Стили для абзацев в деталях профиля, уведомлениях и карточках профиля */
 .profile-details p, .notifications p, .profile-card p {
-    margin-bottom: 10px; /* Отступ снизу абзацев */
+    margin-bottom: 10px;
+    color: black; /* Отступ снизу абзацев */
 }
 
 /* Стили для заголовков в карточке профиля */
 .profile-card h3{
-    margin-bottom: 10px; /* Отступ снизу заголовков */
+    margin-bottom: 10px;
+    color: black; /* Отступ снизу заголовков */
 }
 
 /* Стили для иконок профиля */
@@ -375,9 +378,11 @@ body {
 
 /* Стилизация контейнера */
 .container {
-    padding: 20px; /* Отступы внутри контейнера */
-    max-width: 1200px; /* Максимальная ширина контейнера */
-    margin: 0 auto; /* Центрирование контейнера по горизонтали */
+    /* background: linear-gradient(to right, #c5d8dd, #0083b0); */
+    background:  white;
+    padding: 20px;  /* Отступы внутри контейнера */
+    max-width: 100%; /* Максимальная ширина контейнера */
+    margin: 0; /*Центрирование контейнера по горизонтали */
     min-height: 70vh;
 }
 
@@ -387,27 +392,109 @@ body {
     display: flex; /* Отображение формы как гибкий контейнер (flex) */
     flex-wrap: wrap; /* Разрешение переносов элементов на новую строку */
     gap: 15px; /* Расстояние между элементами формы */
-    background-color: #f8f8f8; /* Фон формы – светло-серый */
+    background-color: #091E3E !important; /* Фон формы – светло-серый */
     padding: 20px; /* Внутренний отступ (padding) в форме */
     border-radius: 8px; /* Скругление углов формы */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень вокруг формы */
     margin-bottom: 30px; /* Внешний отступ (margin) внизу формы */
 }
 
-/* Стили для поля ввода и выпадающего списка */
-.search-input, .search-select {
+/* Стили для поля ввода и выпадающего списка */ 
+.search-container {
+    position: relative;
+    width: 290px;
+  }
+  
+  .search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .search-input {
+    width: 100%;
+    border: none;
+    background: none;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px;
+    outline: none;
+  }
+  
+  .search-input::placeholder {
+    color: #aaa;
+  }
+  
+  .search-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 50%;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-icon svg {
+    fill: #fff;
+  }
+  
+  .search-icon:hover {
+    background-color: #555;
+  }
+  
+  .search-bar:hover {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+  
+  .search-bar:focus-within {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+  }
+  
+  .glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 200%;
+    border-radius: 100px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+    transition: all 0.5s ease;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: -1;
+  }
+  
+  .search-bar:hover + .glow {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  
+  .search-bar:focus-within + .glow {
+    transform: translate(-50%, -50%) scale(1.2);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+  }
+  
+
+.search-select {
     flex: 1; /* Растяжение элемента, чтобы занять доступное пространство */
     padding: 10px; /* Внутренний отступ (padding) внутри элемента */
-    border: 2px solid #ddd; /* Граница элемента – серый цвет */
-    border-radius: 5px; /* Скругление углов элемента */
+    border-radius: 25px; /* Скругление углов элемента */
     font-size: 16px; /* Размер шрифта текста внутри элемента */
     width: 100%; /* Ширина элемента – 100% */
-    max-width: 350px; /* Максимальная ширина элемента – 350px */
+    max-width: 650px; /* Максимальная ширина элемента – 350px */
     transition: border-color 0.3s ease; /* Плавное изменение цвета границы при фокусе */
+    background-color: #091E3E !important;
+    color: #fff;
 }
 
 /* Состояния при наведении и фокусе для полей ввода */
-.search-input:focus, .search-select:focus {
+.search-select:focus {
     border-color: #6236f4; /* Цвет границы при фокусе – фиолетовый */
     outline: none; /* Убираем стандартный контур при фокусе */
 }
@@ -485,8 +572,8 @@ body {
 
 /* Стилизация карточки продукта */
 .card {
-    background: #fff; /* Фоновый цвет карточки */
-    border-radius: 8px; /* Закругленные углы */
+    background: #EEF9FF !important; /* Фоновый цвет карточки */
+    border-radius: 12px; /* Закругленные углы */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень под карточкой */
     overflow: hidden; /* Обрезка содержимого, выходящего за пределы карточки */
     display: flex; /* Использование Flexbox */
@@ -502,15 +589,23 @@ body {
 
 /* Стилизация контейнера для изображения */
 .img-div {
-    text-align: center; /* Выравнивание текста по центру */
-    padding: 20px auto; /* Отступы вокруг изображения */
-    height:180px; /* Установим высоту для блока img-div 180px */
+    text-align:center; /* Выравнивание текста по центру */
+    padding: auto; /* Отступы вокруг изображения */
+    height:180px;
+    margin-top: 30px; /* Установим высоту для блока img-div 180px */
+}
+
+.img-div img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* Стилизация изображения карточки */
 .card-img {
-    width: 180px; /* Ширина изображения */
+    width: 300px; /* Ширина изображения */
     object-fit: cover; /* Обрезка изображения по содержимому */
+    border-radius: 12px;
 }
 
 /* Стилизация тела карточки */
@@ -519,6 +614,9 @@ body {
     display: flex; /* Использование Flexbox */
     flex-direction: column; /* Расположение элементов по вертикали */
     flex-grow: 1; /* Карточка растягивается на доступное пространство */
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    background: #EEF9FF;
 }
 
 
@@ -534,6 +632,9 @@ body {
     text-decoration: none; /* Удаление подчеркивания */
     color: black; /* Цвет текста */
     transition: color 0.3s ease; /* Плавный переход цвета */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 /* Эффект при наведении на ссылку */
@@ -545,7 +646,15 @@ body {
 .card-text {
     flex-grow: 1; /* Текст растягивается на доступное пространство */
     font-size: 0.9rem; /* Размер шрифта */
-    color: #555; /* Цвет текста */
+    color: black; /* Цвет текста */
+}
+
+.card-created_at {
+    font-size: 0.8rem; /* Размер шрифта */
+    color: black; /* Цвет текста */
+    text-align: end;
+    flex-grow: 1;
+    margin-top: auto;
 }
 
 /* Стилизация ссылки в карточке */
@@ -601,7 +710,7 @@ body {
 .product-container {
     margin: 20px 20px; /* Отступы вокруг контейнера */
     padding: 20px 40px; /* Отступы внутри контейнера */
-    background-color: #fff; /* Цвет фона */
+    background-color: #EEF9FF; /* Цвет фона */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Тень под контейнером */
     border-radius: 10px; /* Закругленные углы */
 }
@@ -623,13 +732,13 @@ body {
 
 /* Позиционирование кнопки "сердечко" в верхнем правом углу */
 .heart-button {
-    position: absolute; /* Абсолютное позиционирование внутри контейнера */
+    position:static; /* Абсолютное позиционирование внутри контейнера */
     top: 10px; /* Отступ сверху 10px */
     right: 10px; /* Отступ справа 10px */
     background: none; /* Убираем стандартный фон кнопки */
     border: none; /* Убираем рамку */
     cursor: pointer; /* Указатель мыши при наведении */
-    font-size: 24px; /* Размер иконки сердца 24px */
+    font-size: 34px; /* Размер иконки сердца 24px */
     color: red; /* Цвет иконки сердца - красный */
 }
 
@@ -640,7 +749,7 @@ body {
 
 /* Стиль для незаполненного сердечка */
 .heart-button span {
-    font-size: 24px; /* Размер иконки сердца 24px */
+    font-size: 34px; /* Размер иконки сердца 24px */
     color: grey; /* Серый цвет для незаполненного сердца */
 }
 
@@ -750,7 +859,7 @@ body {
     display: flex; /* Включаем Flexbox для контейнера */
     justify-content: center; /* Горизонтальное выравнивание по центру */
     align-items: center; /* Вертикальное выравнивание по центру */
-    background: linear-gradient(to right, #00b4db, #0083b0);
+    background: #EEF9FF; /* Цвет фона */
 }
 
 .register-form {
@@ -764,7 +873,7 @@ body {
 
 .register-form h2 {
     font-size: 24px; /* Размер шрифта заголовка равен 24 пикселям */
-    color: #6236f4; /* Цвет текста заголовка темно-серый (#333) */
+    color: #0d0b11; /* Цвет текста заголовка темно-серый (#333) */
     text-align: center;
 }
 
@@ -780,7 +889,7 @@ body {
     right: 10px;  /* Отступ справа от родителя на 10 пикселей */
     text-decoration: none;  /* Убираем подчеркивание текста в ссылке */
     font-size: 20px;  /* Устанавливаем размер шрифта 20 пикселей */
-    color: #0056b3;  /* Устанавливаем черный цвет текста (при необходимости можно изменить) */
+    color: #0f0808;  /* Устанавливаем черный цвет текста (при необходимости можно изменить) */
     background: none;  /* Убираем фон кнопки */
     border: none;  /* Убираем границу кнопки */
     cursor: pointer;  /* Устанавливаем указатель курсора при наведении на кнопку */
@@ -883,7 +992,7 @@ body {
     display: flex; /* Включаем Flexbox для контейнера */
     justify-content: center; /* Горизонтальное выравнивание по центру */
     align-items: center; /* Вертикальное выравнивание по центру */
-    background: linear-gradient(to right, #00b4db, #0083b0);
+    background: #EEF9FF !important;
 }
 
 /* Начало стилизация ЛОГИН страницы */
@@ -899,7 +1008,7 @@ body {
 .login-form h2 {
     margin-bottom: 20px; /* Нижний отступ заголовка формы входа составляет 20 пикселей */
     font-size: 24px; /* Размер шрифта заголовка равен 24 пикселям */
-    color: #6236f4; /* Цвет текста заголовка темно-серый (#333) */
+    color: #110e1a; /* Цвет текста заголовка темно-серый (#333) */
 }
 
 .error-msg{
@@ -943,7 +1052,7 @@ body {
 }
 
 .login-button {
-    background: #6236f4; /* Задается светло-голубой цвет фона кнопки входа */
+    background: #007bff; /* Задается светло-голубой цвет фона кнопки входа */
     border: none; /* Убирается стандартная граница у кнопки входа */
     border-radius: 5px; /* Скругление углов кнопки на 5 пикселей */
     color: white; /* Цвет текста на кнопке - белый */
@@ -1002,9 +1111,20 @@ body {
 
 /* НАЧАЛО СТИЛЕЙ ПОДВАЛА */
 .footer {
-    background-color: rgb(8, 8, 85); /* Темный фон подвала */
+    background-color: #091E3E !important; /* Темный фон подвала */
     color: #f5f5f5; /* Светлый цвет текста */
     padding: 40px 20px; /* Внутренний отступ подвала */
+    border-color: white;
+}
+
+.bn45 {
+    width: 170px;
+    height: 50px;
+}
+
+.bn46 {
+    width: 150px;
+    height: 50px;
 }
 
 .footer-content {
@@ -1026,8 +1146,8 @@ body {
 }
 
 .footer-txt {
-    font-size: 24px; /* Размер текста логотипа */
-    font-weight: bold; /* Жирный шрифт */
+    font-size: 30px; /* Размер текста логотипа */
+    font-weight: lighter; /* Жирный шрифт */
     color: #ffffff; /* Цвет текста */
 }
 
@@ -1035,10 +1155,90 @@ body {
     margin-bottom: 20px; /* Отступ снизу */
 }
 
-.footer-links, .footer-social {
+.footer-links {
     display: flex; /* Flexbox для ссылок и социальных иконок */
     flex-direction: column; /* Вертикальное расположение элементов */
 }
+
+.footer-social {
+    display: flex;
+    flex-direction: row; ;
+}
+/* From Uiverse.io by vinodjangid07 */ 
+.footer-social {
+    width: fit-content;
+    height: fit-content;
+    background-color: #091E3E !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 25px;
+    gap: 20px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.055);
+  }
+  
+  /* for all social containers*/
+  .socialContainer {
+    width: 52px;
+    height: 52px;
+    background-color: rgb(44, 44, 44);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition-duration: .3s;
+  }
+  /* instagram*/
+  .containerOne:hover {
+    background-color: #d62976;
+    transition-duration: .3s;
+  }
+  /* twitter*/
+  .containerTwo:hover {
+    background-color: #00acee;
+    transition-duration: .3s;
+  }
+  /* linkdin*/
+  .containerThree:hover {
+    background-color: #0072b1;
+    transition-duration: .3s;
+  }
+  /* Whatsapp*/
+  .containerFour:hover {
+    background-color: #128C7E;
+    transition-duration: .3s;
+  }
+  
+  .socialContainer:active {
+    transform: scale(0.9);
+    transition-duration: .3s;
+  }
+  
+  .socialSvg {
+    width: 17px;
+  }
+  
+  .socialSvg path {
+    fill: rgb(255, 255, 255);
+  }
+  
+  .socialContainer:hover .socialSvg {
+    animation: slide-in-top 0.3s both;
+  }
+  
+  @keyframes slide-in-top {
+    0% {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+  
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  
 
 .footer-contact p {
     margin-bottom: 10px; /* Отступ снизу */
@@ -1057,11 +1257,6 @@ body {
     color: #6236f4; /* Цвет текста при наведении (в тон цвету темы навигационной панели) */
 }
 
-.footer-social p {
-    font-size: 18px; /* Размер текста для социальных заголовков */
-    margin-bottom: 10px; /* Отступ снизу */
-    font-weight: bold; /* Жирный шрифт */
-}
 
 .footer-bottom {
     text-align: center; /* Центрирование текста */
@@ -1116,10 +1311,6 @@ body {
 
     .footer-contact p {
         font-size: 14px; /* Уменьшение размера шрифта контактного текста в футере */
-    }
-
-    .footer-social p {
-        font-size: 16px; /* Уменьшение размера шрифта социальных ссылок в футере */
     }
 
     .footer-bottom {
@@ -1198,9 +1389,6 @@ body {
         font-size: 12px; /* Уменьшение размера шрифта контактного текста в футере */
     }
 
-    .footer-social p {
-        font-size: 14px; /* Уменьшение размера шрифта социальных ссылок в футере */
-    }
 
     .footer-bottom {
         font-size: 10px; /* Уменьшение размера шрифта в нижней части футера */
@@ -1236,13 +1424,137 @@ body {
         font-size: 10px; /* Уменьшение размера шрифта контактного текста в футере */
     }
 
-    .footer-social p {
-        font-size: 12px; /* Уменьшение размера шрифта социальных ссылок в футере */
-    }
-
     .footer-bottom {
         font-size: 8px; /* Уменьшение размера шрифта в нижней части футера */
     }
 }
 
+.comment-form-container {
+    margin-top: 15px;
+    border: 1px solid white;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: black; /* Подходит для тёмной темы */
+    color:white;
+    cursor: pointer;
+}
+
 /* КОНЕЦ СТИЛЯ ДЛЯ АДАПТИВНОСТИ */
+
+
+/* From Uiverse.io by gharsh11032000 */ 
+.forgot-password-wrap{
+    padding: 20px;
+    min-height: 95vh;
+    display: flex; /* Включаем Flexbox для контейнера */
+    justify-content: center; /* Горизонтальное выравнивание по центру */
+    align-items: center; /* Вертикальное выравнивание по центру */
+    background: #EEF9FF;
+}
+
+.form-container1 {
+    max-width: 400px;
+    background-color: #fff;
+    padding: 32px 24px;
+    font-size: 20px;
+    font-family: inherit;
+    color: #212121;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084), 0px 2px 3px rgba(0, 0, 0, 0.168);
+  }
+  
+  .form-container1 button:active {
+    scale: 0.95;
+  }
+  
+  .form-container1 .logo-container1 {
+    text-align: center;
+    font-weight: 600;
+    font-size: 24px;
+  }
+  
+  .form-container1 .form1 {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-container1 .form-group1 {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  .form-container1 .form-group1 label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-container1 .form-group1 input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-family: math;
+    border: 1px solid #ccc;
+    font-size: 20px;
+  }
+  
+  .form-container1 .form-group1 input::placeholder {
+    opacity: 0.5;
+  }
+  
+  .form-container1 .form-group1 input:focus {
+    outline: none;
+    border-color: #1778f2;
+  }
+  
+  .form-container1 .form-submit-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: inherit;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    width: 100%;
+    padding: 12px 16px;
+    font-size: inherit;
+    gap: 8px;
+    margin: 12px 0;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084), 0px 2px 3px rgba(0, 0, 0, 0.168);
+  }
+  
+  .form-container1 .form-submit-btn:hover {
+    background-color: darkblue;
+  }
+  
+  .form-container1 .link {
+    color: #1778f2;
+    text-decoration: none;
+  }
+  
+  .form-container1 .signup-link {
+    align-self: center;
+    font-weight: 500;
+  }
+  
+  .form-container1 .signup-link .link {
+    font-weight: 400;
+  }
+  
+  .form-container1 .link:hover {
+    text-decoration: underline;
+  }
+  
+  .comment-form-container {
+    margin-top: 15px;
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #2a2a2a; /* Подходит для тёмной темы */
+}

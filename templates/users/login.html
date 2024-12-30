@@ -6,7 +6,7 @@
     <div class="login-container">
         <form class="login-form" action="{% url 'login' %}" method="POST">
             {% csrf_token %}
-            <h2>Login</h2>
+            <h2>SIgn In</h2>
 
             {% if messages %}
                 {% for message in messages %}
@@ -17,9 +17,9 @@
             <input type="username" class="input-group" id="username" name="username" placeholder="Enter username" required>
             <input type="password" class="input-group" id="password" name="password" placeholder="Enter password" required>
             <div class="show-pswd"><input type="checkbox" id="togglePassword">Show password</div>
-            <input type="submit" value="Sign in" class="login-button">
-            <p class="forgot-password"><a href="#">Forgot password?</a></p>
-            <p class="register-button"><a href="{% url 'register' %}">Sign up</a></p>
+            <input type="submit" value="Submit" class="login-button">
+            <p class="forgot-password"><a href="{% url 'forgot-password' %}">Forgot password?</a></p>
+            <p class="register-button">Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
         </form>
     </div>
 </div>

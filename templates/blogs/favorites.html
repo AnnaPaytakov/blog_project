@@ -3,7 +3,7 @@
 {% block content %}
     <div class="profile-container">
         <div class="profile-card">
-            <h3>Favorites</h3>
+            <h3>My Favorites</h3> <br>
             <div class="product-grid">
                 {% for favorite in favorites %}
                 <div class="card">
@@ -13,12 +13,14 @@
                         </div>
                     </a>
                     <div class="card-body">
-                        <a href="{% url 'blog' favorite.blog.id %}" class="card-linl">
+                        <a href="{% url 'blog' favorite.blog.id %}" class="card-link">
                             <h5 class="card-title">
                                 <p class="card-link">{{favorite.blog.title}}</p>
                             </h5>
                             <p class="card-text">
-                                <strong>content:</strong> <span style="color: purple;">{{favorite.blog.content|truncatewords:5}}</span>
+                                <strong></strong> {{favorite.blog.created_at}}
+                                <br>
+                                <strong></strong> {{favorite.blog.content|truncatewords:5}}<br>
                             </p>
                         </a>
                     </div>

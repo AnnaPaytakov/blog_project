@@ -19,4 +19,3 @@ document.getElementById('sidebar-close').addEventListener('click', function() {
     // Находим элемент сайдбара по id 'sidebar' и скрываем его, перемещая за пределы экрана (слева -250px)
     document.getElementById('sidebar').style.left = '-250px';
 });
-

@@ -8,8 +8,8 @@
     </div>
     <div class="logo-container">
         <a href="{% url 'blogs' %}" class="logo-link">
-            <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
-            <p class="logo-txt">ORLAN BLOG</p>
+            <img src="{% static 'images/orlan.png' %}" alt="Logo" class="logo">
+            <p class="logo-txt">NEWS BLOG</p>
         </a>
     </div>
     <div class="user-icon-container">
@@ -31,7 +31,7 @@
 
     {% if request.user.is_authenticated %}
     <a href="{% url 'account' %}" class="sidebar-link">Profile</a>
-    <a href="{% url 'user-favorites' %}" class="sidebar-link">Favorites</a>
+    <a href="{% url 'user-favorites' %}" class="sidebar-link">Your Favorites</a>
     <br>
     <a href="{% url 'logout' %}" class="sidebar-link">Log out</a>
     {% else %}

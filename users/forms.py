@@ -6,6 +6,10 @@ from .models import Profile
 from django.forms import ModelForm
 from django.forms.widgets import ClearableFileInput
 from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now
+from datetime import timedelta
+import uuid
+
 
 class CustomClearableFileInput(ClearableFileInput):
     initial_text = _('Current photo')
@@ -20,8 +24,6 @@ class AccountForm(ModelForm):
         ]
         widgets = {
             'profile_image': CustomClearableFileInput(attrs={'class': 'form-control-file'}),
-            'start_time': forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
-            'finish_time': forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -50,3 +52,18 @@ class CustomRegisterForm(UserCreationForm):
         self.fields['last_name'].widget.attrs['placeholder'] = 'Enter your surname'
         self.fields['password1'].widget.attrs['placeholder'] = 'Enter password'
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirm password'
+
+    def save(self, commit=True):
+        user = super(CustomRegisterForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user
+    
+    # def save(self, commit=True):
+    #     user = super(CustomRegisterForm, self).save(commit=True)
+    #     expiration = now() + timedelta(hours=24)
+    #     record = EmailVerification.objects.create(code=uuid.uuid4(), user=user, expiration=expiration)
+    #     record.send_verification_email()
+    #     return user
+    

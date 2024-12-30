@@ -2,9 +2,12 @@
 {% load static %}
 {% block content %}
 <div class="product-container">
+    <h1>{{blog.title}}</h1>
+    <br>
+    <p><span></span>{{blog.created_at}}</p>
+    <br>
     <div class="product-image">
         <img src="{{blog.blog_image.url}}" alt="{{blog.title}}">
-
         <button id="favorite-btn" data-id="{{blog.id}}" class="heart-button">
             <span id="heart-icon" class="{% if status %}filled{% endif %}">
                 &#9825;
@@ -13,11 +16,31 @@
         
     </div>
     <div class="product-details">
-        <h1>{{blog.title}}</h1>
-        <p><span>Content: </span>{{blog.content}}</p>
-        <p><span>Created: </span>{{blog.created_at}}</p>
-        <p><span>Author: </span>{{blog.author.firstname}} {{blog.author.lastname}}</p>
-        <br>
+        <p><span></span>{{blog.content}}</p>
+        <p><span>Category: </span>{{blog.category}}</p>
+        <h2>Comments</h2>
+        <ul>
+            {% for comment in comments %}
+                <li>
+                    <strong>{{ comment.author.firstname }} {{ comment.author.lastname }}</strong> ({{ comment.created_at }}): 
+                    {{ comment.text }}
+                </li>
+            {% empty %}
+                <li>No comments yet.</li>
+            {% endfor %}
+        </ul>
+
+        {% if request.user.is_authenticated %}
+        <h3>Leave a Comment</h3>
+        <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="comment-form-container" type="submit">Add Comment</button>
+        </form>
+        {% else %}
+        <p>You need to <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">Sign up</a> to comment.</p>
+        {% endif %}
+
         <hr>
         <br>
         {% if blog.author == request.user.profile %}

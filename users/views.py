@@ -6,6 +6,10 @@ from .models import Profile
 from blog.models import Post
 from .forms import CustomRegisterForm, AccountForm
 from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 
 
 def profile(request, pk):
@@ -96,3 +100,23 @@ def edit_account(request, pk):
         'form':form,
     }
     return render(request, 'users/account-form.html', context)
+
+def forgot_password(request):
+    return render(request, 'users/forgot-password.html')
+
+
+# class EmailVerificationView(TemplateView):
+#     title = 'Blog - Email Verification'
+#     template_name = 'users/email_verification.html'
+
+#     def get(self, request, *args, **kwargs):
+#         code = kwargs['code']
+#         user = User.objects.get(email=kwargs['email'])
+#         email_verifications = EmailVerification.objects.filter(user=user, code=code)
+#         if not email_verifications.exists():
+#             user.is_verified_email = True
+#             user.save()
+#             return super(EmailVerificationView, self).get(request, *args, **kwargs)
+#         else:
+#             return HttpResponseRedirect(reverse('email_verification'))
+        

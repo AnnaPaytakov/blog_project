@@ -12,12 +12,13 @@
             </div>
         </div>
         <div class="profile-details">
-            <p><span class="prf-icon">&#128222;</span>Email: {{profile.email}}</p>
+            <p><span class="prf-icon"></span>Username: {{profile.username}}</p>
+            <p><span class="prf-icon"></span>Email: {{profile.email}}</p>
             <a href="{% url 'edit-account' profile.id %}" class="edit-prf-btn">Edit</a>
             <a href="{% url 'logout' %}" class="exit-btn">Log out</a>
         </div>
     <div class="profile-card">
-        <a href="{% url 'add-blog' %}" class="add-product-btn">Add blog</a>
+        <a href="{% url 'add-blog' %}" class="add-product-btn">Add Blog</a>
         
         <div class="product-grid">
             {% for blog in all_blogs %}
