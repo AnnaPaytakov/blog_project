@@ -21,14 +21,6 @@
         <a href="{% url 'blogs' %}" class="cancel-button">Clear</a>
     </form>
 
-    <!-- <form method="GET" action="" class="search-form">
-        <div class="form-group">
-            <input type="text" name="q_name" placeholder="Search for something..." value="{{ request.GET.q_name}}" class="search-input">
-        </div>
-        <button type="submit" class="search-button">Go</button>
-        <a href="{% url 'blogs' %}" class="cancel-button">Clear</a>
-    </form> -->
-
     <div class="product-grid">
         {% for blog in all_blogs %}
         <div class="card">
@@ -54,6 +46,28 @@
         </div>
         {% endfor %}
     </div>
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+        {% endif %}
+    
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == 1 or num == page_obj.paginator.num_pages %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+                {% if page_obj.number == num %}
+                    <span class="current">{{ num }}</span>
+                {% else %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                <span>...</span>
+            {% endif %}
+        {% endfor %}
+    
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+        {% endif %}
+    </div>
 </div>
-
 {% endblock content %}

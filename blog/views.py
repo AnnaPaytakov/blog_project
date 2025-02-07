@@ -6,11 +6,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 def blogs(request):
     q_name = request.GET.get('q_name')
     q_category = request.GET.get('q_category')
-    all_blogs= Post.objects.all()
+    all_blogs= Post.objects.all().order_by('-created_at')
+    page_number = request.GET.get('page')  # Номер текущей страницы из URL
 
     if q_name:
         all_blogs = all_blogs.filter(title__icontains=q_name)
@@ -20,9 +22,16 @@ def blogs(request):
     
     categories = Category.objects.all()
 
+    paginator = Paginator(all_blogs, 12)
+    page_obj = paginator.get_page(page_number)
+    print(paginator.page_range)
+    cookies_accepted = request.COOKIES.get('cookies_accepted')
+
     context = {
-        'all_blogs': all_blogs,
+        'all_blogs': page_obj,
         'categories': categories,
+        'page_obj': page_obj,
+        'cookies_accepted': cookies_accepted,
     }
     return render(request, 'blogs/blogs.html', context)
 

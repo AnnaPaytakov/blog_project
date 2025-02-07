@@ -18,7 +18,7 @@
             <input type="password" class="input-group" id="password" name="password" placeholder="Enter password" required>
             <div class="show-pswd"><input type="checkbox" id="togglePassword">Show password</div>
             <input type="submit" value="Submit" class="login-button">
-            <p class="forgot-password"><a href="{% url 'forgot-password' %}">Forgot password?</a></p>
+            <p class="forgot-password"><a href="{% url 'password_reset' %}">Forgot password?</a></p>
             <p class="register-button">Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
         </form>
     </div>

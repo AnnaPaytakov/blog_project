@@ -1274,44 +1274,57 @@ body {
 @media (max-width: 768px) {
 
     .user_container {
-        padding:50px 25px;
+        padding: 50px 25px;
     }
 
     .title {
-        font-size: 2rem; /* Уменьшение размера шрифта заголовка */
+        font-size: 2rem;
+        /* Уменьшение размера шрифта заголовка */
     }
 
     .card-buttons {
-        flex-direction: column; /* Изменение направления флекс-контейнера на вертикальное */
-        gap: 10px; /* Уменьшение промежутка между кнопками */
+        flex-direction: column;
+        /* Изменение направления флекс-контейнера на вертикальное */
+        gap: 10px;
+        /* Уменьшение промежутка между кнопками */
     }
 
     .product-container {
-        display: flex; /* Использование Flexbox для контейнера продукта */
-        flex-direction: column; /* Расположение элементов по вертикали */
-        gap: 20px; /* Промежуток между элементами контейнера */
+        display: flex;
+        /* Использование Flexbox для контейнера продукта */
+        flex-direction: column;
+        /* Расположение элементов по вертикали */
+        gap: 20px;
+        /* Промежуток между элементами контейнера */
     }
 
-    .product-image, .product-details {
-        flex: 1; /* Растяжение элементов на доступное пространство */
+    .product-image,
+    .product-details {
+        flex: 1;
+        /* Растяжение элементов на доступное пространство */
     }
 
     .footer-logo .logo {
-        height: 30px; /* Уменьшение высоты логотипа в футере */
-        margin-right: 10px; /* Отступ справа от логотипа */
+        height: 30px;
+        /* Уменьшение высоты логотипа в футере */
+        margin-right: 10px;
+        /* Отступ справа от логотипа */
     }
 
     .footer-txt {
-        font-size: 20px; /* Уменьшение размера шрифта текста в футере */
+        font-size: 20px;
+        /* Уменьшение размера шрифта текста в футере */
     }
 
-    .footer-link, .social-link {
-        font-size: 14px; /* Уменьшение размера шрифта ссылок в футере */
+    .footer-link,
+    .social-link {
+        font-size: 14px;
+        /* Уменьшение размера шрифта ссылок в футере */
     }
 
     .footer-contact p {
-        font-size: 14px; /* Уменьшение размера шрифта контактного текста в футере */
-    }
+        font-size: 14px;
+        /* Уменьшение размера шрифта контактного текста в футере */ }
 
     .footer-bottom {
         font-size: 12px; /* Уменьшение размера шрифта в нижней части футера */
@@ -1441,120 +1454,246 @@ body {
 
 /* КОНЕЦ СТИЛЯ ДЛЯ АДАПТИВНОСТИ */
 
-
-/* From Uiverse.io by gharsh11032000 */ 
-.forgot-password-wrap{
-    padding: 20px;
-    min-height: 95vh;
-    display: flex; /* Включаем Flexbox для контейнера */
-    justify-content: center; /* Горизонтальное выравнивание по центру */
-    align-items: center; /* Вертикальное выравнивание по центру */
-    background: #EEF9FF;
-}
-
-.form-container1 {
-    max-width: 400px;
-    background-color: #fff;
-    padding: 32px 24px;
-    font-size: 20px;
-    font-family: inherit;
-    color: #212121;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084), 0px 2px 3px rgba(0, 0, 0, 0.168);
-  }
   
-  .form-container1 button:active {
-    scale: 0.95;
-  }
-  
-  .form-container1 .logo-container1 {
-    text-align: center;
-    font-weight: 600;
-    font-size: 24px;
-  }
-  
-  .form-container1 .form1 {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-container1 .form-group1 {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  
-  .form-container1 .form-group1 label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .form-container1 .form-group1 input {
-    width: 100%;
-    padding: 12px 16px;
-    border-radius: 6px;
-    font-family: math;
-    border: 1px solid #ccc;
-    font-size: 20px;
-  }
-  
-  .form-container1 .form-group1 input::placeholder {
-    opacity: 0.5;
-  }
-  
-  .form-container1 .form-group1 input:focus {
-    outline: none;
-    border-color: #1778f2;
-  }
-  
-  .form-container1 .form-submit-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: inherit;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    width: 100%;
-    padding: 12px 16px;
-    font-size: inherit;
-    gap: 8px;
-    margin: 12px 0;
-    cursor: pointer;
-    border-radius: 6px;
-    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084), 0px 2px 3px rgba(0, 0, 0, 0.168);
-  }
-  
-  .form-container1 .form-submit-btn:hover {
-    background-color: darkblue;
-  }
-  
-  .form-container1 .link {
-    color: #1778f2;
-    text-decoration: none;
-  }
-  
-  .form-container1 .signup-link {
-    align-self: center;
-    font-weight: 500;
-  }
-  
-  .form-container1 .signup-link .link {
-    font-weight: 400;
-  }
-  
-  .form-container1 .link:hover {
-    text-decoration: underline;
-  }
-  
-  .comment-form-container {
+.comment-form-container {
     margin-top: 15px;
     border: 1px solid #444;
     padding: 10px;
     border-radius: 5px;
     background-color: #2a2a2a; /* Подходит для тёмной темы */
+}
+
+.pagination {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination a, .pagination span {
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination a {
+    color: #ffffff;
+    background-color: #1a237e; /* Темно-синий цвет */
+    border: 1px solid #3949ab; /* Чуть светлее синий для границы */
+}
+
+.pagination a:hover {
+    background-color: #3949ab; /* Более светлый синий при наведении */
+    border-color: #5c6bc0;
+}
+
+.pagination .current {
+    color: #ffffff;
+    background-color: #283593; /* Акцентный темно-синий */
+    border: 1px solid #3949ab;
+    cursor: default;
+}
+
+.pagination span {
+    color: #999999; /* Серый цвет для "..." */
+    background-color: transparent;
+    cursor: default;
+}
+
+/* From Uiverse.io by Priyanshu02020 */ 
+#heart {
+    display: none;
+  }
+  
+  .like-button {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    height: 48px;
+    width: 136px;
+    border-radius: 16px;
+    border: none;
+    background-color: #1d1d1d;
+    overflow: hidden;
+    box-shadow:
+      inset -2px -2px 5px rgba(255, 255, 255, 0.2),
+      inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+      4px 4px 10px rgba(0, 0, 0, 0.4),
+      -2px -2px 8px rgba(255, 255, 255, 0.1);
+  }
+  
+  .like {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  
+  .like-icon {
+    fill: #505050;
+    height: 28px;
+    width: 28px;
+  }
+  
+  .like-text {
+    color: #fcfcfc;
+    font-size: 16px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .like-count {
+    position: absolute;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #717070;
+    font-size: 16px;
+    border-left: 2px solid #4e4e4e;
+    transition: all 0.5s ease-out;
+  }
+  
+  .like-count.two {
+    transform: translateY(40px);
+  }
+  
+  .on:checked ~ .like .like-icon {
+    fill: #fc4e4e;
+    animation: enlarge 0.2s ease-out 1;
+    transition: all 0.2s ease-out;
+  }
+  
+  .on:checked ~ .like-count.two {
+    transform: translateX(0);
+    color: #fcfcfc;
+  }
+  
+  .on:checked ~ .like-count.one {
+    transform: translateY(-40px);
+  }
+  
+  @keyframes enlarge {
+    0% {
+      transform: scale(0.5);
+    }
+    100% {
+      transform: scale(1.2);
+    }
+  }
+
+.navbar-links {
+    display: flex; 
+    font-size: 18px; /* Размер текста ссылки */
+    color: white; /* Цвет текста ссылки */
+    text-decoration: none; /* Убираем подчеркивание */
+    padding: 8px 15px; /* Внутренний отступ */
+    padding-right: 0px; 
+    transition: background-color 0.3s, color 0.3s; /* Переходы при наведении */
+}
+
+.nav-link:hover {
+    background-color: #6236f4; /* Цвет фона при наведении */
+    color: #fff; /* Цвет текста при наведении */
+}
+
+.language-selector {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.selected-language img {
+    width: 40px;
+}
+
+.language-options {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    list-style: none;
+    z-index: 10;
+}
+
+.language-options a {
+    text-decoration: none;
+    color: #333;
+}
+
+.language-options li {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.language-options li:hover {
+    background-color: #f0f0f0;
+}
+
+.language-options img {
+    width: 20px;
+}
+
+#cookie-banner {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #007BFF; /* Голубой фон */
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+}
+
+#cookie-banner p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#cookie-banner button {
+    margin: 10px;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+#accept-cookies {
+    background: green;
+    color: white;
+}
+
+#accept-cookies:hover {
+    background: #28a745; /* Чуть светлее при наведении */
+}
+
+#reject-cookies {
+    background: red;
+    color: white;
+}
+
+#reject-cookies:hover {
+    background: #dc3545; /* Чуть светлее при наведении */
 }

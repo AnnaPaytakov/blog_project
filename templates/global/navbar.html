@@ -23,10 +23,38 @@
        </a>
        {% endif %}
     </div>
+
+    <div class="navbar-links">
+        <div class="language-selector">
+            <div class="selected-language">
+                <img src="{% static 'images/icon-united-kingdom.png' %}" alt="UK Flag">
+                <span>EN</span>
+            </div>
+                <ul class="language-options">
+                    <a href="#">
+                        <li data-value="ru">
+                            <img src="{% static 'images/icon-united-kingdom.png' %}" alt="UK Flag"> EN
+                        </li>
+                    </a>
+                    <a href='#'>
+                        <li data-value="tk">
+                            <img src="{% static 'images/icon-turkmenistan.png' %} " alt="Turkmenistan Flag"> TM
+                        </li>
+                    </a>
+                    <a href="#">
+                        <li data-value="en">
+                            <img src="{% static 'images/icon-russia.png' %}" alt="Russia Flag"> RU
+                        </li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="sidebar" id="sidebar">
     <div class="sidebar-close" id="sidebar-close">&times;</div>
+    
 
 
     {% if request.user.is_authenticated %}

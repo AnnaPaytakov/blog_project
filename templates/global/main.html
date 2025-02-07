@@ -6,8 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ORLAN BLOG</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">    
 </head>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (!document.cookie.includes("cookies_accepted")) {
+            document.getElementById("cookie-banner").style.display = "block";
+        }
+    
+        document.getElementById("accept-cookies").addEventListener("click", function() {
+            document.cookie = "cookies_accepted=true; path=/; max-age=" + (60 * 60 * 24 * 30); // 30 дней
+            document.getElementById("cookie-banner").style.display = "none";
+        });
+    
+        document.getElementById("reject-cookies").addEventListener("click", function() {
+            document.cookie = "cookies_accepted=false; path=/; max-age=" + (60 * 60 * 24 * 30);
+            document.getElementById("cookie-banner").style.display = "none";
+        });
+    });
+    </script>    
+
 <body>
     {% include 'global/navbar.html' %}
 
@@ -16,8 +35,16 @@
     {% endblock %}
 
     {% include 'global/footer.html' %}
+
+    <div id="cookie-banner" style="display: none; position: fixed; bottom: 0; width: 100%; background: #091E3E !important; color: white; padding: 10px; text-align: center;">
+        <p>We use cookies to improve your experience.</p>
+        <button id="accept-cookies">Accept</button>
+        <button id="reject-cookies">Reject</button>
+    </div>    
 </body>
+
 <script src="{% static 'js/sidebar.js' %}"></script>
+<script src="{% static 'js/lang.js' %}" ></script>
 {% block for_script %}
 
 {% endblock for_script %}

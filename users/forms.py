@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-
 from django import forms
 from .models import Profile
 from django.forms import ModelForm
@@ -59,11 +58,3 @@ class CustomRegisterForm(UserCreationForm):
         if commit:
             user.save()
         return user
-    
-    # def save(self, commit=True):
-    #     user = super(CustomRegisterForm, self).save(commit=True)
-    #     expiration = now() + timedelta(hours=24)
-    #     record = EmailVerification.objects.create(code=uuid.uuid4(), user=user, expiration=expiration)
-    #     record.send_verification_email()
-    #     return user
-    
