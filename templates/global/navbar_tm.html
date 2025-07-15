@@ -2,9 +2,9 @@
 
 <div class="navbar">
     <div class="logo-container">
-        <a href="{% url 'blogs' %}" class="logo-link">
+        <a href="{% url 'blogs_tm' %}" class="logo-link">
             <img src="{% static 'images/orlan.png' %}" alt="Logo" class="logo">
-            <p class="logo-txt">NEWS BLOG</p>
+            <p class="logo-txt">HABAR BLOG</p>
         </a>
     </div>
 
@@ -15,16 +15,16 @@
         <span class="dropdown-arrow">▼</span>
     </a>
     <ul class="user-dropdown" id="user-dropdown">
-        <li><a href="{% url 'account' %}">Profile</a></li>
-        <li><a href="{% url 'user-favorites' %}">Your Favorites</a></li>
-        <li><a href="{% url 'logout' %}">Log out</a></li>
+        <li><a href="{% url 'account' %}">Şahsy otag</a></li>
+        <li><a href="{% url 'user-favorites-tm' %}">Halanlarym</a></li>
+        <li><a href="{% url 'logout' %}">Ulgamdan çykmak</a></li>
     </ul>
     {% else %}
     <a href="{% url 'account' %}" class="user-icon-link">
         <img src="{% static 'images/user-icon.png' %}" alt="User Icon" class="user-icon">
     </a>
     {% endif %}
-</div>
+    </div>
 
     <div class="navbar-links">
         <div class="language-selector">

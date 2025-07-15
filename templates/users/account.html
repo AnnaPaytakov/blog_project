@@ -17,6 +17,7 @@
             <a href="{% url 'edit-account' profile.id %}" class="edit-prf-btn">Edit</a>
             <a href="{% url 'logout' %}" class="exit-btn">Log out</a>
         </div>
+    {% if user.username == 'admin' %}
     <div class="profile-card">
         <a href="{% url 'add-blog' %}" class="add-product-btn">Add Blog</a>
         
@@ -49,5 +50,6 @@
             {% endfor %}
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}

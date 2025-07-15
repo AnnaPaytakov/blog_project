@@ -1,4 +1,4 @@
-{% extends 'global/main.html' %}
+{% extends 'global/main_tm.html' %}
 {% load static %}
 {% block content %}
 
@@ -6,56 +6,50 @@
     <form method="GET" action="" class="search-form" aria-label="Search form">
         <div class="form-group">
             <select name="q_category" class="search-select" aria-label="Select category">
-                <option value="">Category</option>
+                <option value="">Kategoriýa</option>
                 {% for category in categories %}
                 <option value="{{category.name}}" {% if request.GET.q_category == category.name %}selected{% endif %}>
-                    {{category.name}}
+                    {{category.name_tm}}
                 </option>
                 {% endfor %}
             </select>
         </div>
         <div class="form-group">
-            <input type="text" name="q_name" placeholder="Search by title or content..." value="{{ request.GET.q_name}}" class="search-input" aria-label="Search input">
+            <input type="text" name="q_name" placeholder="At ýa-da mazmuny boýunça gözle..." value="{{ request.GET.q_name}}" class="search-input" aria-label="Search input">
             <input type="hidden" name="page" value="{{ request.GET.page }}">
         </div>
-        <button type="submit" class="search-button" aria-label="Submit search">Go</button>
-        <a href="{% url 'blogs' %}" class="cancel-button" aria-label="Clear filters">Clear</a>
+        <button type="submit" class="search-button" aria-label="Submit search">Gözle</button>
+        <a href="{% url 'blogs_tm' %}" class="cancel-button" aria-label="Clear filters">Arassala</a>
     </form>
 
     <div class="product-grid">
         {% for blog in all_blogs %}
         <div class="card">
-            <a href="{% url 'blog' blog.id %}" class="card-link">
+            <a href="{% url 'blog_tm' blog.id %}" class="card-link">
                 <div class="img-div">
-                    {% if blog.blog_image %}
-                        <img src="{{ blog.blog_image.url }}" alt="{{ blog.title }}" class="card-img">
-                    {% else %}
-                        <img src="{% static 'images/default.jpg' %}" alt="{{ blog.title }}" class="card-img">
-                    {% endif %}
+                    <img src="{{blog.blog_image.url}}" alt="{{blog.title}}" class="card-img">
                 </div>
             </a>
             <div class="card-body">
-                <a href="{% url 'blog' blog.id %}" class="card-link">
+                <a href="{% url 'blog_tm' blog.id %}" class="card-link">
                     <h5 class="card-title">
-                        <p class="card-link">{{ blog.title }}</p>
+                        <p class="card-link">{{blog.title_tm}}</p>
                     </h5>
                     <p class="card-text">
-                        <strong></strong> {{ blog.content|truncatewords:10 }}<br>
+                        <strong></strong> {{blog.content_tm|truncatewords:10}}<br>
                         <br>
                     </p>
                     <p class="card-created_at">
-                        <strong></strong> {{ blog.created_at|date:"d.m.Y" }}
+                        <strong></strong> {{blog.created_at|date:"d.m.Y"}}
                     </p> 
                 </a>
             </div>
         </div>
-        {% empty %}
-        <p>No posts found.</p>
         {% endfor %}
     </div>
     <div class="pagination">
         {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">«</a>
+            <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
         {% endif %}
     
         {% for num in page_obj.paginator.page_range %}
@@ -73,7 +67,7 @@
         {% endfor %}
     
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">»</a>
+            <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
         {% endif %}
     </div>
 </div>

@@ -1,0 +1,36 @@
+services:
+  web:
+    build: .
+    command: >
+      sh -c "until curl -s http://meilisearch:7700/health; do echo 'Waiting for Meilisearch...'; sleep 2; done;
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DJANGO_SETTINGS_MODULE=blog_project.settings
+      - MEILI_MASTER_KEY=supersecretkey123
+    depends_on:
+      - meilisearch
+    networks:
+      - app_network
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    ports:
+      - "7700:7700"
+    volumes:
+      - meilisearch_data:/data.ms
+    environment:
+      - MEILI_MASTER_KEY=supersecretkey123
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  meilisearch_data:

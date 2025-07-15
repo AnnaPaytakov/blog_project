@@ -133,6 +133,7 @@ body {
     align-items: center; /* Вертикальное выравнивание по центру */
     text-decoration: none; /* Убираем подчеркивание */
     margin-left: 20px; /* Отступ слева */
+    gap: 5px;
 }
 
 .user-icon {
@@ -151,6 +152,55 @@ body {
 .user-icon-link:focus .user-icon {
     border-color: #6236f4; /* Цвет границы при наведении */
     outline: none; /* Убираем стандартное выделение (outline) при фокусе */
+}
+
+.dropdown-arrow {
+    font-size: 12px; /* Размер стрелки */
+    color: white; /* Цвет стрелки */
+    transition: color 0.3s; /* Плавное изменение цвета */
+}
+
+/* Эффект при наведении на стрелку */
+.user-icon-link:hover .dropdown-arrow {
+    color: #6236f4; /* Цвет стрелки при наведении, совпадает с границей иконки */
+}
+
+.user-dropdown {
+    display: none; /* Скрыто по умолчанию */
+    position: absolute;
+    top: 100%; /* Появляется под иконкой */
+    right: 0; /* Выравнивание по правому краю */
+    background-color: #fff; /* Белый фон */
+    list-style: none; /* Убираем точки списка */
+    padding: 10px 0; /* Внутренние отступы */
+    margin: 5px 0 0; /* Отступ сверху */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    min-width: 150px; /* Минимальная ширина меню */
+    z-index: 1000; /* Поверх других элементов */
+}
+
+.user-dropdown li {
+    margin: 0;
+}
+
+.user-dropdown li a {
+    display: block; /* Ссылка занимает всю строку */
+    padding: 8px 15px; /* Внутренние отступы */
+    text-decoration: none; /* Без подчеркивания */
+    color: #333; /* Цвет текста */
+    font-size: 14px; /* Размер шрифта */
+    transition: background-color 0.2s; /* Плавный переход */
+}
+
+.user-dropdown li a:hover {
+    background-color: #f5f5f5; /* Цвет фона при наведении */
+    color: #6236f4; /* Цвет текста при наведении */
+}
+
+/* Показ меню при клике */
+.user-icon-container.active .user-dropdown {
+    display: block; /* Показываем меню */
 }
 
 /* КОНЕЦ СТИЛЕЙ НАВИГАЦИОННОЙ ПАНЕЛИ */
@@ -732,26 +782,50 @@ body {
 
 /* Позиционирование кнопки "сердечко" в верхнем правом углу */
 .heart-button {
-    position:static; /* Абсолютное позиционирование внутри контейнера */
-    top: 10px; /* Отступ сверху 10px */
-    right: 10px; /* Отступ справа 10px */
-    background: none; /* Убираем стандартный фон кнопки */
-    border: none; /* Убираем рамку */
-    cursor: pointer; /* Указатель мыши при наведении */
-    font-size: 34px; /* Размер иконки сердца 24px */
-    color: red; /* Цвет иконки сердца - красный */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    background: transparent;
+    border: 2px solid #ccc; /* Легкая рамка */
+    border-radius: 20px; /* Округлые углы */
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+    background-color: #091E3E !important;
 }
 
-/* Необязательный стиль для заполненного сердечка */
-.heart-button .filled {
-    color: red; /* Красный цвет для заполненного сердца */
+.heart-button:hover {
+    transform: scale(1.02); /* Легкий эффект увеличения */
+    background-color: #f1f1f1; /* Легкий фон при наведении */
 }
 
-/* Стиль для незаполненного сердечка */
-.heart-button span {
-    font-size: 34px; /* Размер иконки сердца 24px */
-    color: grey; /* Серый цвет для незаполненного сердца */
+.heart-button:active {
+    transform: scale(1); /* Убираем эффект при нажатии */
+    background-color: #e0e0e0; /* Темный фон при нажатии */
 }
+
+#heart-icon {
+    font-size: 24px;
+    color: #ccc; /* Серый цвет по умолчанию */
+    transition: color 0.3s ease;
+}
+
+#heart-icon.filled {
+    color: #ffcc00; /* Желтый цвет, когда добавлено в избранное */
+}
+
+.favorite-text {
+    font-size: 14px;
+    color: #ccc; /* Начальный серый цвет для текста */
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.favorite-text.saved {
+    color: #ffcc00; /* Желтый цвет текста при сохранении */
+}
+
 
 
 /* Стилизация деталей продукта */
@@ -1504,11 +1578,7 @@ body {
 }
 
 /* From Uiverse.io by Priyanshu02020 */ 
-#heart {
-    display: none;
-  }
-  
-  .like-button {
+.like-button {
     position: relative;
     cursor: pointer;
     display: flex;
@@ -1530,14 +1600,30 @@ body {
     height: 100%;
     display: flex;
     cursor: pointer;
+    align-items: center; /* Вертикальное выравнивание по центру */
+    justify-content: center; /* Заменяем space-evenly на center для компактности */
+    background: none;
+    border: none;
+    padding: 0;
+    background-color: #091E3E !important;
+  }
+  
+  #like-icon {
+    display: flex; /* Делаем span flex-контейнером для выравнивания внутри */
     align-items: center;
-    justify-content: space-evenly;
   }
   
   .like-icon {
     fill: #505050;
     height: 28px;
     width: 28px;
+    margin-right: 8px; /* Отступ между сердечком и текстом */
+  }
+  
+  .filled .like-icon {
+    fill: #fc4e4e;
+    animation: enlarge 0.2s ease-out 1;
+    transition: all 0.2s ease-out;
   }
   
   .like-text {
@@ -1558,25 +1644,7 @@ body {
     font-size: 16px;
     border-left: 2px solid #4e4e4e;
     transition: all 0.5s ease-out;
-  }
-  
-  .like-count.two {
-    transform: translateY(40px);
-  }
-  
-  .on:checked ~ .like .like-icon {
-    fill: #fc4e4e;
-    animation: enlarge 0.2s ease-out 1;
-    transition: all 0.2s ease-out;
-  }
-  
-  .on:checked ~ .like-count.two {
-    transform: translateX(0);
-    color: #fcfcfc;
-  }
-  
-  .on:checked ~ .like-count.one {
-    transform: translateY(-40px);
+    background-color: #091E3E !important;
   }
   
   @keyframes enlarge {
@@ -1588,6 +1656,7 @@ body {
     }
   }
 
+  
 .navbar-links {
     display: flex; 
     font-size: 18px; /* Размер текста ссылки */
@@ -1649,6 +1718,8 @@ body {
 .language-options img {
     width: 20px;
 }
+
+
 
 #cookie-banner {
     display: none;

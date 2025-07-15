@@ -20,4 +20,4 @@ class CommentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['text'].widget.attrs['placeholder']='Write a comment...'
+        self.fields['text'].widget.attrs['placeholder']='...'

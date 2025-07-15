@@ -1,0 +1,17 @@
+<form method="GET" action="{% url 'search_posts' %}">
+    <input type="text" name="q" placeholder="Search..." value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+
+{% if results %}
+    <ul>
+        {% for post in results %}
+            <li>
+                <a href="{% url 'blog' post.id %}">{{ post.title }}</a>
+                <p>{{ post.content|truncatewords:20 }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No results found</p>
+{% endif %}
