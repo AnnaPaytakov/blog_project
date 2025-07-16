@@ -100,8 +100,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGES = (
     ('en', 'English'),
-    ('ru', 'Russian'),
-    ('tm', 'Turkmen'),
+    ('ru', 'На русском'),
+    ('tk', 'Türkmençe'),
 )
 
 LANGUAGE_CODE = 'en-us'
@@ -110,7 +110,7 @@ PARLER_LANGUAGES = {
     None: (
         {'code': 'en'},
         {'code': 'ru'},
-        {'code': 'tm'},
+        {'code': 'tk'},
     ),
     'default': {
         'fallback': 'en',

@@ -1,7 +1,6 @@
 .vscode
 venv
 .env
-db.sqlite3
 
 */migrations/
 */migrations/*.py
