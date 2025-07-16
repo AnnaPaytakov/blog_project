@@ -3,5 +3,10 @@ venv
 .env
 db.sqlite3
 
-**/__pycache__/
-**/migrations/
+*/migrations/
+*/migrations/*.py
+!*/migrations/__init__.py
+
+__pycache__/
+
+meili_api_key.txt
