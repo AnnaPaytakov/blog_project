@@ -1,17 +1,17 @@
 from django.forms import ModelForm
-from .models import Post
-from .models import Comment
+from parler.forms import TranslatableModelForm
+from .models import Post, Comment
 
-class BlogForm(ModelForm):
+class BlogForm(TranslatableModelForm):
     class Meta:
         model = Post
-        fields = ['title','content', 'blog_image', 'category']
+        fields = ['title', 'content', 'blog_image', 'category']
 
     def __init__(self, *args, **kwargs):
         super(BlogForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs['placeholder']='Blog Title'
-        self.fields['content'].widget.attrs['placeholder']='Content'
-        self.fields['category'].widget.attrs['placeholder']='Category'
+        self.fields['title'].widget.attrs['placeholder'] = 'Blog Title'
+        self.fields['content'].widget.attrs['placeholder'] = 'Content'
+        self.fields['category'].widget.attrs['placeholder'] = 'Category'
 
 class CommentForm(ModelForm):
     class Meta:
@@ -20,4 +20,4 @@ class CommentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['text'].widget.attrs['placeholder']='...'
+        self.fields['text'].widget.attrs['placeholder'] = '...'

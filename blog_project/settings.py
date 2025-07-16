@@ -14,6 +14,7 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
 
+USE_MEILISEARCH = os.environ.get('USE_MEILISEARCH')
 
 
 INSTALLED_APPS = [
@@ -27,7 +28,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
 
-    'django_meilisearch',
+    # 'django_meilisearch',
 
     'parler'
 ]

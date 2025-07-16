@@ -1,11 +1,15 @@
 from django.contrib import admin
-from .models import Post, Favorite, Category, Comment, TranslatedCategory
+from .models import Post, Favorite,Category,Comment,Like
 from parler.admin import TranslatableAdmin
 
-admin.site.register(Post)
 admin.site.register(Favorite)
-admin.site.register(Category)
 admin.site.register(Comment)
-@admin.register(TranslatedCategory)
-class TranslatedCategoryAdmin(TranslatableAdmin):
-    list_display = ('__str__',)
+admin.site.register(Like)
+
+@admin.register(Category)
+class CategoryAdmin(TranslatableAdmin):
+    list_display = ('name',)
+
+@admin.register(Post)
+class PostAdmin(TranslatableAdmin):
+    list_display = ('title', 'author', 'created_at')

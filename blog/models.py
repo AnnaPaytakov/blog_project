@@ -3,14 +3,13 @@ import uuid
 from users.models import Profile
 from django.contrib.auth.models import User
 from django.utils.timezone import now
-
 from parler.models import TranslatableModel, TranslatedFields
 
-
-class TranslatedCategory(TranslatableModel):
+class Category(TranslatableModel):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-    translations = TranslatedFields(name=models.CharField(max_length=100))
-
+    translations = TranslatedFields(
+        name=models.CharField(max_length=100, unique=True)
+    )
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -20,38 +19,20 @@ class TranslatedCategory(TranslatableModel):
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
-class Category(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    name_ru = models.CharField(max_length=100, unique=True, blank=True, null=True)
-    name_tm = models.CharField(max_length=100, unique=True, blank=True, null=True)
-    created = models.DateTimeField(auto_now_add=True)
+class Post(TranslatableModel):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-
-    def __str__(self):
-        return self.name
-
-class Post(models.Model):
-    title = models.CharField(max_length=500)
-    title_ru = models.CharField(max_length=500, blank=True, null=True)
-    title_tm = models.CharField(max_length=500, blank=True, null=True)
-    content = models.TextField(null=True, blank=True)
-    content_ru = models.TextField(null=True, blank=True)
-    content_tm = models.TextField(null=True, blank=True)
+    translations = TranslatedFields(
+        title=models.CharField(max_length=500),
+        content=models.TextField(null=True, blank=True),
+    )
     blog_image = models.ImageField(null=True, blank=True, default='default.jpg')
     author = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-
-    class MeiliSearch:
-        index_name = "posts"
-        attributes_to_index = ["title", "content", "title_ru", "content_ru", "title_tm", "content_tm"]
-        attributes_to_retrieve = ["title", "content", "created_at"]
-        searchable_attributes = ["title", "content", "title_ru", "content_ru", "title_tm", "content_tm"]
 
     def __str__(self):
-        return self.title
-    
+        return self.safe_translation_getter('title', any_language=True)
+
     @property
     def likes_count(self):
         return self.likes.count()
@@ -59,7 +40,7 @@ class Post(models.Model):
     class Meta:
         verbose_name = "Post"
         verbose_name_plural = "Posts"
-    
+            
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')

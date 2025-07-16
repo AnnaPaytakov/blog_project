@@ -7,113 +7,159 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.db.models import Q
 from django.core.paginator import Paginator
-import meilisearch
+# import meilisearch
 from django.conf import settings
+from django.utils.translation import get_language
 import os
 
-# Используем мастер-ключ напрямую
-master_key = os.environ.get("MEILI_MASTER_KEY", "supersecretkey123")
-meilisearch_client = meilisearch.Client(settings.DJANGO_MEILISEARCH["url"], master_key)
-meilisearch_index = meilisearch_client.index("posts")
+# # Используем мастер-ключ напрямую
+# master_key = os.environ.get("MEILI_MASTER_KEY", "supersecretkey123")
+# meilisearch_client = meilisearch.Client(settings.DJANGO_MEILISEARCH["url"], master_key)
+# meilisearch_index = meilisearch_client.index("posts")
+
+# def search_posts(request):
+#     query = request.GET.get("q", "").strip()
+#     results = {"hits": []}
+#     if query:
+#         try:
+#             results = meilisearch_index.search(query)
+#         except Exception as e:
+#             print(f"Meilisearch error: {e}")
+
+#     return render(request, "blog/search.html", {"results": results["hits"], "query": query})
+
+
+# def blogs(request):
+#     q_name = request.GET.get("q_name", "").strip()
+#     q_category = request.GET.get("q_category", "").strip()
+#     page_number = request.GET.get("page")
+
+#     if q_name:
+#         try:
+#             results = meilisearch_index.search(q_name)
+#             post_ids = [hit["id"] for hit in results["hits"]]
+#             all_blogs = Post.objects.filter(id__in=post_ids)
+#         except Exception as e:
+#             print(f"Meilisearch error: {e}")
+#             all_blogs = Post.objects.none()
+#     else:
+#         all_blogs = Post.objects.all().order_by('created_at')
+
+#     if q_category:
+#         all_blogs = all_blogs.filter(category__name=q_category)
+
+#     categories = Category.objects.all()
+#     paginator = Paginator(all_blogs, 12)
+#     page_obj = paginator.get_page(page_number)
+
+#     context = {
+#         "all_blogs": page_obj,
+#         "categories": categories,
+#         "page_obj": page_obj,
+#         "cookies_accepted": request.COOKIES.get("cookies_accepted"),
+#         "current_language": "en",
+#     }
+#     return render(request, "blogs/blogs.html", context)
 
 def search_posts(request):
     query = request.GET.get("q", "").strip()
-    results = {"hits": []}
+    results = []
+
     if query:
-        try:
-            results = meilisearch_index.search(query)
-        except Exception as e:
-            print(f"Meilisearch error: {e}")
+        lang = get_language()
+        results = Post.objects.language(lang).filter(
+            Q(translations__title__icontains=query) |
+            Q(translations__content__icontains=query)
+        ).order_by('-created_at')
 
-    return render(request, "blog/search.html", {"results": results["hits"], "query": query})
+    return render(request, "blog/search.html", {"results": results, "query": query})
 
-
-def blogs(request):
+def blogs_en(request):
     q_name = request.GET.get("q_name", "").strip()
     q_category = request.GET.get("q_category", "").strip()
     page_number = request.GET.get("page")
 
-    if q_name:
-        try:
-            results = meilisearch_index.search(q_name)
-            post_ids = [hit["id"] for hit in results["hits"]]
-            all_blogs = Post.objects.filter(id__in=post_ids)
-        except Exception as e:
-            print(f"Meilisearch error: {e}")
-            all_blogs = Post.objects.none()
-    else:
-        all_blogs = Post.objects.all().order_by('created_at')
-
-    if q_category:
-        all_blogs = all_blogs.filter(category__name=q_category)
-
-    categories = Category.objects.all()
-    paginator = Paginator(all_blogs, 12)
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        "all_blogs": page_obj,
-        "categories": categories,
-        "page_obj": page_obj,
-        "cookies_accepted": request.COOKIES.get("cookies_accepted"),
-        "current_language": "en",
-    }
-    return render(request, "blogs/blogs.html", context)
-
-
-def blogs_ru(request):
-    q_name = request.GET.get('q_name')
-    q_category = request.GET.get('q_category')
-    all_blogs = Post.objects.all().order_by('-created_at')
-    page_number = request.GET.get('page')
+    all_blogs = Post.objects.language("en").all().order_by('-created_at')
 
     if q_name:
         all_blogs = all_blogs.filter(
-            Q(title_ru__icontains=q_name) | 
-            Q(content_ru__icontains=q_name)
+            Q(translations__title__icontains=q_name) |
+            Q(translations__content__icontains=q_name)
         )
 
     if q_category:
-        all_blogs = all_blogs.filter(category__name_ru=q_category)
-    
-    categories = Category.objects.all()
+        all_blogs = all_blogs.filter(category__translations__name__icontains=q_category)
+
+    categories = Category.objects.language("en").all()
     paginator = Paginator(all_blogs, 12)
     page_obj = paginator.get_page(page_number)
-    
+
     context = {
         'all_blogs': page_obj,
         'categories': categories,
         'page_obj': page_obj,
-        'current_language':'ru',
+        'current_language': 'ru',
     }
     return render(request, 'blogs/blogs_ru.html', context)
 
-def blogs_tm(request):
-    q_name = request.GET.get('q_name')
-    q_category = request.GET.get('q_category')
-    all_blogs = Post.objects.all().order_by('-created_at')
-    page_number = request.GET.get('page')
+
+def blogs_ru(request):
+    q_name = request.GET.get("q_name", "").strip()
+    q_category = request.GET.get("q_category", "").strip()
+    page_number = request.GET.get("page")
+
+    all_blogs = Post.objects.language("ru").all().order_by('-created_at')
 
     if q_name:
         all_blogs = all_blogs.filter(
-            Q(title_tm__icontains=q_name) | 
-            Q(content_tm__icontains=q_name)
+            Q(translations__title__icontains=q_name) |
+            Q(translations__content__icontains=q_name)
         )
 
     if q_category:
-        all_blogs = all_blogs.filter(category__name_tm=q_category)
-    
-    categories = Category.objects.all()
+        all_blogs = all_blogs.filter(category__translations__name__icontains=q_category)
+
+    categories = Category.objects.language("ru").all()
     paginator = Paginator(all_blogs, 12)
     page_obj = paginator.get_page(page_number)
-    
+
     context = {
         'all_blogs': page_obj,
         'categories': categories,
         'page_obj': page_obj,
-        'current_language':'tm',
+        'current_language': 'ru',
     }
-    return render(request, 'blogs/blogs_tm.html', context)
+    return render(request, 'blogs/blogs_ru.html', context)
+
+
+def blogs_tk(request):
+    q_name = request.GET.get("q_name", "").strip()
+    q_category = request.GET.get("q_category", "").strip()
+    page_number = request.GET.get("page")
+
+    all_blogs = Post.objects.language("tk").all().order_by('-created_at')
+
+    if q_name:
+        all_blogs = all_blogs.filter(
+            Q(translations__title__icontains=q_name) |
+            Q(translations__content__icontains=q_name)
+        )
+
+    if q_category:
+        all_blogs = all_blogs.filter(category__translations__name__icontains=q_category)
+
+    categories = Category.objects.language("tk").all()
+    paginator = Paginator(all_blogs, 12)
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'all_blogs': page_obj,
+        'categories': categories,
+        'page_obj': page_obj,
+        'current_language': 'ru',
+    }
+    return render(request, 'blogs/blogs_ru.html', context)
+
 
 
 def blog(request, pk):
