@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
 
     'django_meilisearch',
+
+    'parler'
 ]
 
 DJANGO_MEILISEARCH = {
@@ -96,7 +98,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LANGUAGES = (
+    ('en', 'English'),
+    ('ru', 'Russian'),
+    ('tm', 'Turkmen'),
+)
+
 LANGUAGE_CODE = 'en-us'
+
+PARLER_LANGUAGES = {
+    None: (
+        {'code': 'en'},
+        {'code': 'ru'},
+        {'code': 'tm'},
+    ),
+    'default': {
+        'fallback': 'en',
+        'hide_untranslated': False,
+    }
+}
 
 TIME_ZONE = 'Asia/Ashgabat'
 

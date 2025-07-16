@@ -4,6 +4,8 @@ from users.models import Profile
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
+from parler.models import TranslatableModel, TranslatedFields
+
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     name_ru = models.CharField(max_length=100, unique=True, blank=True, null=True)
