@@ -26,10 +26,8 @@ INSTALLED_APPS = [
 
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
-    'adminsite.apps.AdminsiteConfig',
 
     'django_meilisearch',
-
 ]
 
 DJANGO_MEILISEARCH = {
