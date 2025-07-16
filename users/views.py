@@ -1,112 +1,100 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from .models import Profile
-from blog.models import Post
-from .forms import CustomRegisterForm, AccountForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView, TemplateView, FormView, UpdateView, View
+from django.urls import reverse_lazy
 from django.core.mail import send_mail
+from django.shortcuts import redirect
+from .models import Profile
+from .forms import CustomRegisterForm, AccountForm
+from blog.models import Post
 
-def profile(request, pk):
-    profile = Profile.objects.get(id=pk)
-    all_blogs = Post.objects.filter(author=profile)
 
-    context = {
-        'profile':profile,
-        'all_blogs':all_blogs,
-    }
-    return render(request, 'users/profile.html', context)
+#Profile we Blog ucin umumy Mixin
+class ProfileContextMixin:
+    def get_profile(self):
+        raise NotImplementedError("Basga classlarda get_profile() berilmedik")
 
-@login_required(login_url='login')
-def userAccount(request):
-    profile = request.user.profile
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = self.get_profile()
+        context['profile'] = profile
+        context['all_blogs'] = Post.objects.filter(author=profile)
+        return context
 
-    all_blogs = Post.objects.filter(author=profile)
+class ProfileDetailView(ProfileContextMixin, DetailView):
+    model = Profile
+    template_name = 'users/profile.html'
+    context_object_name = 'profile'
 
-    context = {
-        'profile':profile,
-        'all_blogs':all_blogs,
-    }
+    def get_profile(self):
+        return self.get_object()
 
-    return render(request, 'users/account.html', context)
+class UserAccountView(LoginRequiredMixin, ProfileContextMixin, TemplateView):
+    template_name = 'users/account.html'
+    login_url = 'login'
 
-def loginPage(request):
+    def get_profile(self):
+        return self.request.user.profile
 
-    if request.user.is_authenticated:
-        return redirect('blogs')
+class LoginUserView(TemplateView):
+    template_name = 'users/login.html'
 
-    if request.method=='POST':
-        username = request.POST['username']
-        password = request.POST['password']
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('blogs')
+        return super().dispatch(request, *args, **kwargs)
 
-        try:
-            user = User.objects.get(username=username)
-        except:
-            messages.error(request, 'There is no such user')
+    def post(self, request, *args, **kwargs):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
         user = authenticate(username=username, password=password)
-
         if user:
             login(request, user)
             return redirect('blogs')
-        else:
-            messages.error(request,'Wrong password')
-    return render(request, 'users/login.html')
+        messages.error(request, 'Adynyz yada parolynyz nadogry!')
+        return self.get(request, *args, **kwargs)
 
-def logoutUser(request):
-    logout(request)
-    return redirect('login')
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
 
-def registerUser(request):
-    form = CustomRegisterForm()
+class RegisterUserView(FormView):
+    template_name = 'users/register.html'
+    form_class = CustomRegisterForm
+    success_url = reverse_lazy('blogs')
 
-    if request.method=='POST':
-        form = CustomRegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            login(request, user)
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.save()
+        login(self.request, user)
 
-            subject = 'Добро пожаловать на наш блог!'
-            message = '''
-                Спасибо за регистрацию на нашем сайте! 
-                Желаем вам приятного времяпрепровождения.
-            '''
-            from_email = 'paytakov.annamurad2003@gmail.com'
-            recipient_list = [user.email]
+        subject = 'Habar Blogymyza hos geldiniz!'
+        message = 'Ulgama gireniz ucin sagbolun! Biz bilen galyn!.'
+        from_email = 'paytakov.annamurad2003@gmail.com'
+        recipient_list = [user.email]
+        send_mail(subject, message, from_email, recipient_list)
 
-            send_mail(subject, message, from_email, recipient_list)
-
-            return redirect('blogs')
+        return super().form_valid(form)
     
-    context = {
-        'form':form,
-    }
-    return render(request, 'users/register.html', context)
+class EditAccountView(LoginRequiredMixin, UpdateView):
+    model = Profile
+    form_class = AccountForm
+    template_name = 'users/account-form.html'
+    success_url = reverse_lazy('account')
+    login_url = 'login'
 
-def edit_account(request, pk):
-    account = Profile.objects.get(id=pk)
-    form = AccountForm(instance=account)
+    def form_valid(self, form):
+        account = form.save(commit=False)
+        if account.user.username != self.request.POST.get('username'):
+            account.user.save()
+        account.save()
+        return super().form_valid(form)
 
-    if request.method=='POST':
-        form = AccountForm(request.POST, request.FILES, instance=account)
-        if form.is_valid():
-            account = form.save(commit=False)
-
-            if account.user.username != request.POST['username']:
-                account.user.save()
-                print('User changed username')
-
-            account.save()
-            return redirect('account')
-        else:
-            messages.error(request, 'Please, fill in the form correctly')
-
-    context ={
-        'form':form,
-    }
-    return render(request, 'users/account-form.html', context)
-
-def forgot_password(request):
-    return render(request, 'users/forgot-password.html')        
+    def form_invalid(self, form):
+        messages.error(self.request, 'Maglumatlary dogry dolduruň!')
+        return super().form_invalid(form)
+class ForgotPasswordView(TemplateView):
+    template_name = 'users/forgot-password.html'
