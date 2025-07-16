@@ -55,6 +55,10 @@ class Post(models.Model):
     @property
     def likes_count(self):
         return self.likes.count()
+
+    class Meta:
+        verbose_name = "Post"
+        verbose_name_plural = "Posts"
     
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -63,6 +67,10 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ('user', 'post')
+
+    class Meta:
+        verbose_name = "Like"
+        verbose_name_plural = "Likes"
 
 class Comment(models.Model):
     blog = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
@@ -73,9 +81,17 @@ class Comment(models.Model):
     def __str__(self):
         return f'Comment by {self.author} on {self.blog}'
 
+    class Meta:
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
+
 class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favortes')
     blog = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='favorites')
 
     def __str__(self):
         return f'{self.user.username} - {self.blog.title}'
+
+    class Meta:
+        verbose_name = "Favorite"
+        verbose_name_plural = "Favorites"
