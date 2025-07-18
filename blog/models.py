@@ -7,9 +7,7 @@ from parler.models import TranslatableModel, TranslatedFields
 
 class Category(TranslatableModel):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
-    translations = TranslatedFields(
-        name=models.CharField(max_length=100)
-    )
+    translations = TranslatedFields(name=models.CharField(max_length=100))
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -42,16 +40,13 @@ class Post(TranslatableModel):
         verbose_name_plural = "Posts"
             
 class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
     created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'post')
-
     class Meta:
         verbose_name = "Like"
         verbose_name_plural = "Likes"
+        unique_together = ('user', 'post')
 
 class Comment(models.Model):
     blog = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
@@ -67,7 +62,7 @@ class Comment(models.Model):
         verbose_name_plural = "Comments"
 
 class Favorite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favortes', blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='favorites', blank=True, null=True)
     blog = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='favorites')
 
     def __str__(self):
