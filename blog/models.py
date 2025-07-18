@@ -8,6 +8,7 @@ from parler.models import TranslatableModel, TranslatedFields
 class Category(TranslatableModel):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     translations = TranslatedFields(name=models.CharField(max_length=100))
+    slug = models.SlugField(max_length=150, unique=True, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -23,6 +24,7 @@ class Post(TranslatableModel):
         title=models.CharField(max_length=500),
         content=models.TextField(null=True, blank=True),
     )
+    slug = models.SlugField(max_length=150, unique=True, blank=True, null=True)
     blog_image = models.ImageField(null=True, blank=True, default='default.jpg')
     author = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='posts')
