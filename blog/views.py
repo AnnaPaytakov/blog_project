@@ -1,351 +1,161 @@
-from django.shortcuts import render, redirect
-from .models import Post, Favorite, Comment, Category, Like
-from .forms import BlogForm
-from .forms import CommentForm
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, DetailView, View, FormView, UpdateView, TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
+from django.urls import reverse_lazy
 from django.db.models import Q
-from django.core.paginator import Paginator
-# import meilisearch
-from django.conf import settings
-from django.utils.translation import get_language
-import os
-
-# # Используем мастер-ключ напрямую
-# master_key = os.environ.get("MEILI_MASTER_KEY", "supersecretkey123")
-# meilisearch_client = meilisearch.Client(settings.DJANGO_MEILISEARCH["url"], master_key)
-# meilisearch_index = meilisearch_client.index("posts")
-
-# def search_posts(request):
-#     query = request.GET.get("q", "").strip()
-#     results = {"hits": []}
-#     if query:
-#         try:
-#             results = meilisearch_index.search(query)
-#         except Exception as e:
-#             print(f"Meilisearch error: {e}")
-
-#     return render(request, "blog/search.html", {"results": results["hits"], "query": query})
+from .models import Post, Favorite, Category, Like
+from .forms import BlogForm, CommentForm
+from django.views.generic.edit import FormMixin
+from django.urls import reverse
 
 
-# def blogs(request):
-#     q_name = request.GET.get("q_name", "").strip()
-#     q_category = request.GET.get("q_category", "").strip()
-#     page_number = request.GET.get("page")
+class BlogListView(ListView):
+    model = Post
+    template_name = 'blogs/blogs.html'
+    context_object_name = 'all_blogs'
+    paginate_by = 12
 
-#     if q_name:
-#         try:
-#             results = meilisearch_index.search(q_name)
-#             post_ids = [hit["id"] for hit in results["hits"]]
-#             all_blogs = Post.objects.filter(id__in=post_ids)
-#         except Exception as e:
-#             print(f"Meilisearch error: {e}")
-#             all_blogs = Post.objects.none()
-#     else:
-#         all_blogs = Post.objects.all().order_by('created_at')
+    def get_queryset(self):
+        q_name = self.request.GET.get("q_name", "").strip()
+        q_category = self.request.GET.get("q_category", "").strip()
+        queryset = Post.objects.language('en').all().order_by('-created_at')
 
-#     if q_category:
-#         all_blogs = all_blogs.filter(category__name=q_category)
+        if q_name:
+            queryset = queryset.filter(
+                Q(translations__title__icontains=q_name) |
+                Q(translations__content__icontains=q_name)
+            )
+        if q_category:
+            queryset = queryset.filter(
+                category__translations__name__icontains=q_category
+            )
+        return queryset
 
-#     categories = Category.objects.all()
-#     paginator = Paginator(all_blogs, 12)
-#     page_obj = paginator.get_page(page_number)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'categories': Category.objects.language('en').all(),
+            'current_language': 'en',
+        })
+        return context
 
-#     context = {
-#         "all_blogs": page_obj,
-#         "categories": categories,
-#         "page_obj": page_obj,
-#         "cookies_accepted": request.COOKIES.get("cookies_accepted"),
-#         "current_language": "en",
-#     }
-#     return render(request, "blogs/blogs.html", context)
+class BlogDetailView(FormMixin, DetailView):
+    model = Post
+    template_name = 'blogs/blog.html'
+    context_object_name = 'blog'
+    form_class = CommentForm
 
-def search_posts(request):
-    query = request.GET.get("q", "").strip()
-    results = []
+    def get_success_url(self):
+        return reverse('blog', kwargs={'pk': self.object.pk})
 
-    if query:
-        lang = get_language()
-        results = Post.objects.language(lang).filter(
-            Q(translations__title__icontains=query) |
-            Q(translations__content__icontains=query)
-        ).order_by('-created_at')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        blog = self.object
+        context['comments'] = blog.comments.all()
+        context['form'] = self.get_form()
+        context['current_language'] = 'en'
 
-    return render(request, "blog/search.html", {"results": results, "query": query})
+        if self.request.user.is_authenticated:
+            context['status'] = Favorite.objects.filter(user=self.request.user, blog=blog).exists()
+            context['liked'] = Like.objects.filter(user=self.request.user, post=blog).exists()
+        else:
+            context['status'] = False
+            context['liked'] = False
 
-def blogs_en(request):
-    q_name = request.GET.get("q_name", "").strip()
-    q_category = request.GET.get("q_category", "").strip()
-    page_number = request.GET.get("page")
+        return context
 
-    all_blogs = Post.objects.language("en").all().order_by('-created_at')
-
-    if q_name:
-        all_blogs = all_blogs.filter(
-            Q(translations__title__icontains=q_name) |
-            Q(translations__content__icontains=q_name)
-        )
-
-    if q_category:
-        all_blogs = all_blogs.filter(category__translations__name__icontains=q_category)
-
-    categories = Category.objects.language("en").all()
-    paginator = Paginator(all_blogs, 12)
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'all_blogs': page_obj,
-        'categories': categories,
-        'page_obj': page_obj,
-        'current_language': 'ru',
-    }
-    return render(request, 'blogs/blogs_ru.html', context)
-
-
-def blogs_ru(request):
-    q_name = request.GET.get("q_name", "").strip()
-    q_category = request.GET.get("q_category", "").strip()
-    page_number = request.GET.get("page")
-
-    all_blogs = Post.objects.language("ru").all().order_by('-created_at')
-
-    if q_name:
-        all_blogs = all_blogs.filter(
-            Q(translations__title__icontains=q_name) |
-            Q(translations__content__icontains=q_name)
-        )
-
-    if q_category:
-        all_blogs = all_blogs.filter(category__translations__name__icontains=q_category)
-
-    categories = Category.objects.language("ru").all()
-    paginator = Paginator(all_blogs, 12)
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'all_blogs': page_obj,
-        'categories': categories,
-        'page_obj': page_obj,
-        'current_language': 'ru',
-    }
-    return render(request, 'blogs/blogs_ru.html', context)
-
-
-def blogs_tk(request):
-    q_name = request.GET.get("q_name", "").strip()
-    q_category = request.GET.get("q_category", "").strip()
-    page_number = request.GET.get("page")
-
-    all_blogs = Post.objects.language("tk").all().order_by('-created_at')
-
-    if q_name:
-        all_blogs = all_blogs.filter(
-            Q(translations__title__icontains=q_name) |
-            Q(translations__content__icontains=q_name)
-        )
-
-    if q_category:
-        all_blogs = all_blogs.filter(category__translations__name__icontains=q_category)
-
-    categories = Category.objects.language("tk").all()
-    paginator = Paginator(all_blogs, 12)
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'all_blogs': page_obj,
-        'categories': categories,
-        'page_obj': page_obj,
-        'current_language': 'ru',
-    }
-    return render(request, 'blogs/blogs_ru.html', context)
-
-
-
-def blog(request, pk):
-    blog = Post.objects.get(id=pk) 
-    comments = blog.comments.all()
-
-    if request.method == "POST":
-        form = CommentForm(request.POST)
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.blog = blog
+            comment.blog = self.object
             comment.author = request.user.profile
             comment.save()
-            return redirect('blog', pk=blog.pk)
-    else:
-        form = CommentForm()
+            return redirect(self.get_success_url())
+        return self.form_invalid(form)
 
-    status = False
-    liked =False
-    if request.user.is_authenticated:
-        status = Favorite.objects.filter(user=request.user, blog=blog).exists()
-        liked = Like.objects.filter(user=request.user).exists()
-    context = {
-        'blog':blog,
-        'status':status,
-        'liked':liked,
-        'comments': comments,
-        'form':form,
-        'current_language': 'en',
-        }
-    return render(request, 'blogs/blog.html', context)
 
-def blog_ru(request, pk):
-    blog = Post.objects.get(id=pk)
-    comments = blog.comments.all()
+class BlogCreateView(LoginRequiredMixin, FormView):
+    template_name = 'blogs/blog-form.html'
+    form_class = BlogForm
+    success_url = reverse_lazy('account')
 
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.blog = blog
-            comment.author = request.user.profile
-            comment.save()
-            return redirect('blog_ru', pk=blog.pk)
-    else:
-        form = CommentForm()
+    def form_valid(self, form):
+        blog = form.save(commit=False)
+        blog.author = self.request.user.profile
+        blog.save()
+        return super().form_valid(form)
 
-    status = False
-    if request.user.is_authenticated:
-        status = Favorite.objects.filter(user=request.user, blog=blog).exists()
 
-    context = {
-        'blog': blog,
-        'status': status,
-        'comments': comments,
-        'form': form,
-        'current_language':'ru',
-    }
-    return render(request, 'blogs/blog_ru.html', context)
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    form_class = BlogForm
+    template_name = 'blogs/blog-form.html'
+    success_url = reverse_lazy('account')
 
-def blog_tm(request, pk):
-    blog = Post.objects.get(id=pk)
-    comments = blog.comments.all()
 
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.blog = blog
-            comment.author = request.user.profile
-            comment.save()
-            return redirect('blog_tm', pk=blog.pk)
-    else:
-        form = CommentForm()
+class BlogDeleteView(LoginRequiredMixin, View):
+    template_name = 'blogs/delete-blog.html'
+    success_url = reverse_lazy('account')
 
-    status = False
-    if request.user.is_authenticated:
-        status = Favorite.objects.filter(user=request.user, blog=blog).exists()
+    def get(self, request, pk):
+        blog = get_object_or_404(Post, id=pk)
+        return render(request, self.template_name, {'blog': blog})
 
-    context = {
-        'blog': blog,
-        'status': status,
-        'comments': comments,
-        'form': form,
-        'current_language':'tm',
-    }
-    return render(request, 'blogs/blog_tm.html', context)
+    def post(self, request, pk):
+        blog = get_object_or_404(Post, id=pk)
+        blog.delete()
+        return redirect(self.success_url)
 
-@login_required
-def toggle_like(request):
-    if request.method == "POST":
+
+class FavoritesView(LoginRequiredMixin, TemplateView):
+    template_name = 'blogs/favorites.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['favorites'] = Favorite.objects.filter(user=self.request.user)
+        return context
+
+
+class ToggleFavoriteView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        blog = get_object_or_404(Post, id=pk)
+        favorite, created = Favorite.objects.get_or_create(user=request.user, blog=blog)
+        if not created:
+            favorite.delete()
+            return JsonResponse({'added': False})
+        return JsonResponse({'added': True})
+
+
+class ToggleLikeView(LoginRequiredMixin, View):
+    def post(self, request):
         post_id = request.POST.get("post_id")
-        post = Post.objects.get(id=post_id)
-        user = request.user
-
-        like, created = Like.objects.get_or_create(user=user, post=post)
+        post = get_object_or_404(Post, id=post_id)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
         if not created:
             like.delete()
             liked = False
         else:
             liked = True
-
         return JsonResponse({
             "liked": liked,
             "likes_count": Like.objects.filter(post=post).count()
         })
-    return JsonResponse({"error": "Invalid request"}, status=400)
 
+class BlogSearchView(TemplateView):
+    template_name = 'blog/search.html'
 
-@login_required
-def add_to_favorites(request, pk):
-    blog = Post.objects.get(id=pk)
-    favorite, created = Favorite.objects.get_or_create(user=request.user, blog=blog)
-
-    if not created:
-        favorite.delete()
-        return JsonResponse({'added':False})
-    return JsonResponse({'added':True})
-
-@login_required
-def favorites_list(request):
-    favorites = Favorite.objects.filter(user=request.user)
-    context = {
-        'favorites':favorites,
-    }
-    return render(request, 'blogs/favorites.html', context)
-
-@login_required
-def favorites_list_ru(request):
-    favorites = Favorite.objects.filter(user=request.user)
-    context = {
-        'favorites':favorites,
-    }
-    return render(request, 'blogs/favorites_ru.html', context)
-
-@login_required
-def favorites_list_tm(request):
-    favorites = Favorite.objects.filter(user=request.user)
-    context = {
-        'favorites':favorites,
-    }
-    return render(request, 'blogs/favorites_tm.html', context)
-
-
-@login_required(login_url='login')
-def add_blog(request):
-    form = BlogForm()
-    if request.method == 'POST':
-        form=BlogForm(request.POST, request.FILES)
-        if form.is_valid():
-            blog = form.save(commit=False)
-            blog.author = request.user.profile
-            form.save()
-            return redirect('account')
-        else:
-            messages.error(request, 'Fill the form correctly')
-
-    context = {
-        'form':form,
-    }
-    return render(request, 'blogs/blog-form.html', context)
-
-@login_required(login_url='login')
-def update_blog(request, pk):
-    blog = Post.objects.get(id=pk)
-    form = BlogForm(instance=blog)
-    if request.method == 'POST':
-        form = BlogForm(request.POST, request.FILES, instance=blog)
-        if form.is_valid():
-            form.save()
-            return redirect('account')
-        
-    context = {
-        'form':form,
-    }
-    return render(request, 'blogs/blog-form.html', context)
-
-@login_required(login_url='login')
-def delete_blog(request, pk):
-    blog = Post.objects.get(id=pk)
-
-    if request.method == "POST":
-        blog.delete()
-        return redirect('account')
-    
-    context = {
-        'blog':blog,
-    }
-    return render(request, 'blogs/delete-blog.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get("q", "").strip()
+        results = []
+        if query:
+            results = Post.objects.language('en').filter(
+                Q(translations__title__icontains=query) |
+                Q(translations__content__icontains=query)
+            ).order_by('-created_at')
+        context['results'] = results
+        context['query'] = query
+        return context

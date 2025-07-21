@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -14,27 +15,25 @@
         if (!document.cookie.includes("cookies_accepted")) {
             document.getElementById("cookie-banner").style.display = "block";
         }
-    
+
         document.getElementById("accept-cookies").addEventListener("click", function() {
-            document.cookie = "cookies_accepted=true; path=/; max-age=" + (60 * 60 * 24 * 30); // 30 дней
+            document.cookie = "cookies_accepted=true; path=/; max-age=" + (60 * 60 * 24 * 30);
             document.getElementById("cookie-banner").style.display = "none";
         });
-    
+
         document.getElementById("reject-cookies").addEventListener("click", function() {
             document.cookie = "cookies_accepted=false; path=/; max-age=" + (60 * 60 * 24 * 30);
             document.getElementById("cookie-banner").style.display = "none";
         });
     });
-    </script>    
+</script>    
 
 <body>
-    {% include 'global/navbar.html' %}
+    {% include "global/navbar.html" %}
 
-    {% block content %}
+    {% block content %}{% endblock %}
 
-    {% endblock %}
-
-    {% include 'global/footer.html' %}
+    {% include "global/footer.html" %}
 
     <div id="cookie-banner" style="display: none; position: fixed; bottom: 0; width: 100%; background: #091E3E !important; color: white; padding: 10px; text-align: center;">
         <p>We use cookies to improve your experience.</p>
@@ -44,8 +43,6 @@
 </body>
 
 <script src="{% static 'js/sidebar.js' %}"></script>
-<script src="{% static 'js/lang.js' %}" ></script>
-{% block for_script %}
-
-{% endblock for_script %}
+<script src="{% static 'js/lang.js' %}"></script>
+{% block for_script %}{% endblock for_script %}
 </html>

@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <div class="navbar">
@@ -24,47 +25,13 @@
         <img src="{% static 'images/user-icon.png' %}" alt="User Icon" class="user-icon">
     </a>
     {% endif %}
-</div>
-
-    <div class="navbar-links">
-        <div class="language-selector">
-            <div class="selected-language">
-                {% if current_language == 'ru' %}
-                    <img src="{% static 'images/icon-russia.png' %}" alt="Russia Flag">
-                    <span>RU</span>
-                {% elif current_language == 'tm' %}
-                    <img src="{% static 'images/icon-turkmenistan.png' %} " alt="Turkmenistan Flag">
-                    <span>TM</span>
-                {% else %}
-                    <img src="{% static 'images/icon-united-kingdom.png' %}" alt="UK Flag">
-                    <span>EN</span>
-                {% endif %}
-            </div>
-            <ul class="language-options">
-                <a href="{% url 'blogs' %}">
-                    <li data-value="en">
-                        <img src="{% static 'images/icon-united-kingdom.png' %}" alt="UK Flag"> EN
-                    </li>
-                </a>
-                <a href='{% url "blogs_tm" %}'>
-                    <li data-value="tk">
-                        <img src="{% static 'images/icon-turkmenistan.png' %} " alt="Turkmenistan Flag"> TM
-                    </li>
-                </a>
-                <a href="{% url 'blogs_ru' %}">
-                    <li data-value="ru">
-                        <img src="{% static 'images/icon-russia.png' %}" alt="Russia Flag"> RU
-                    </li>
-                </a>
-            </ul>
-        </div>
     </div>
 </div>
 
 <script>
     document.getElementById('user-icon-toggle').addEventListener('click', function(e) {
-        e.preventDefault(); // Предотвращаем переход по ссылке
-        var container = this.parentElement; // Находим .user-icon-container
-        container.classList.toggle('active'); // Переключаем класс active
+        e.preventDefault();
+        var container = this.parentElement;
+        container.classList.toggle('active');
     });
 </script>

@@ -1,25 +1,28 @@
+
 {% extends 'global/main.html' %}
 {% load static %}
 {% block content %}
 <div class="product-container">
-    <h1>{{blog.title}}</h1>
+    <h1>{{ blog.title }}</h1>
     <br>
-    <p><span></span>{{blog.created_at|date:"d.m.Y"}}</p>
+    <p>{{ blog.created_at|date:"d.m.Y" }}</p>
     <br>
     <div class="product-image">
-        <a href="{{blog.blog_image.url}}"><img src="{{blog.blog_image.url}}" alt="{{blog.title}}"></a>
+        <a href="{{ blog.blog_image.url }}">
+            <img src="{{ blog.blog_image.url }}" alt="{{ blog.title }}">
+        </a>
 
         <br>
-        
-        <button id="favorite-btn" data-id="{{blog.id}}" class="heart-button">
-            <span id="heart-icon" class="{% if status %}filled{% endif %}">
-                &#9733;
+
+        <button id="favorite-btn" data-id="{{ blog.id }}" class="heart-button">
+            <span id="heart-icon" class="{% if status %}filled{% endif %}">&#9733;</span>
+            <span id="favorite-text" class="favorite-text">
+                {% if status %}Saved{% else %}Save to favorites{% endif %}
             </span>
-            <span id="favorite-text" class="favorite-text">{% if status %}Saved{% else %}Save to favorites{% endif %}</span>
         </button>
 
         <br>
-        
+
         <div class="like-button">
             <button id="like-btn" data-id="{{ blog.id }}" class="like">
                 <span id="like-icon" class="{% if liked %}filled{% endif %}">
@@ -31,15 +34,16 @@
             </button>
             <span class="like-count one">{{ blog.likes_count }}</span>
         </div>
-
     </div>
+
     <div class="product-details">
-        <p><span></span>{{blog.content|linebreaks}}</p>
+        <p>{{ blog.content|linebreaks }}</p>
+
         <h2>Comments</h2>
         <ul>
             {% for comment in comments %}
                 <li>
-                    <strong>{{ comment.author.firstname }} {{ comment.author.lastname }}</strong> ({{ comment.created_at|date:"d.m.Y" }}): 
+                    <strong>{{ comment.author.firstname }} {{ comment.author.lastname }}</strong> ({{ comment.created_at|date:"d.m.Y" }}):
                     {{ comment.text }}
                 </li>
             {% empty %}
@@ -48,14 +52,16 @@
         </ul>
 
         {% if request.user.is_authenticated %}
-        <h3>Leave a Comment</h3>
-        <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="comment-form-container" type="submit">Add Comment</button>
-        </form>
+            <h3>Leave a Comment</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="comment-form-container" type="submit">Add Comment</button>
+            </form>
         {% else %}
-        <p>You need to <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">Sign up</a> to comment.</p>
+            <p>
+                You need to <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">Sign up</a> to comment.
+            </p>
         {% endif %}
     </div>
 </div>

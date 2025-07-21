@@ -1,11 +1,12 @@
+
 {% extends 'global/main.html' %}
 {% load static %}
 {% block content %}
 
 <div class="container">
-    <form method="GET" action="" class="search-form" aria-label="Search form">
+    <form method="GET" action="" class="search-form">
         <div class="form-group">
-            <select name="q_category" class="search-select" aria-label="Select category">
+            <select name="q_category" class="search-select">
                 <option value="">Category</option>
                 {% for category in categories %}
                 <option value="{{category.name}}" {% if request.GET.q_category == category.name %}selected{% endif %}>
@@ -15,11 +16,11 @@
             </select>
         </div>
         <div class="form-group">
-            <input type="text" name="q_name" placeholder="Search by title or content..." value="{{ request.GET.q_name}}" class="search-input" aria-label="Search input">
+            <input type="text" name="q_name" placeholder="Search by title or content..." value="{{ request.GET.q_name}}" class="search-input">
             <input type="hidden" name="page" value="{{ request.GET.page }}">
         </div>
-        <button type="submit" class="search-button" aria-label="Submit search">Go</button>
-        <a href="{% url 'blogs' %}" class="cancel-button" aria-label="Clear filters">Clear</a>
+        <button type="submit" class="search-button">Go</button>
+        <a href="." class="cancel-button">Clear</a>
     </form>
 
     <div class="product-grid">
@@ -40,11 +41,10 @@
                         <p class="card-link">{{ blog.title }}</p>
                     </h5>
                     <p class="card-text">
-                        <strong></strong> {{ blog.content|truncatewords:10 }}<br>
-                        <br>
+                        {{ blog.content|truncatewords:10 }}<br><br>
                     </p>
                     <p class="card-created_at">
-                        <strong></strong> {{ blog.created_at|date:"d.m.Y" }}
+                        {{ blog.created_at|date:"d.m.Y" }}
                     </p> 
                 </a>
             </div>
@@ -53,11 +53,11 @@
         <p>No posts found.</p>
         {% endfor %}
     </div>
+
     <div class="pagination">
         {% if page_obj.has_previous %}
             <a href="?page={{ page_obj.previous_page_number }}">«</a>
         {% endif %}
-    
         {% for num in page_obj.paginator.page_range %}
             {% if num == 1 or num == page_obj.paginator.num_pages %}
                 <a href="?page={{ num }}">{{ num }}</a>
@@ -71,7 +71,6 @@
                 <span>...</span>
             {% endif %}
         {% endfor %}
-    
         {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}">»</a>
         {% endif %}
