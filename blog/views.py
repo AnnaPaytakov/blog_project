@@ -143,19 +143,3 @@ class ToggleLikeView(LoginRequiredMixin, View):
             "liked": liked,
             "likes_count": Like.objects.filter(post=post).count()
         })
-
-class BlogSearchView(TemplateView):
-    template_name = 'blog/search.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        query = self.request.GET.get("q", "").strip()
-        results = []
-        if query:
-            results = Post.objects.language('en').filter(
-                Q(translations__title__icontains=query) |
-                Q(translations__content__icontains=query)
-            ).order_by('-created_at')
-        context['results'] = results
-        context['query'] = query
-        return context

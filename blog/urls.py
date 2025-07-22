@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     BlogListView, BlogDetailView, BlogCreateView, BlogUpdateView, BlogDeleteView,
-    FavoritesView, ToggleFavoriteView, ToggleLikeView, BlogSearchView
+    FavoritesView, ToggleFavoriteView, ToggleLikeView
 )
 
 urlpatterns = [
@@ -16,5 +16,4 @@ urlpatterns = [
     path('user-favorites/', FavoritesView.as_view(), name='user-favorites'),
 
     path('toggle-like/', ToggleLikeView.as_view(), name='toggle_like'),
-    path('search/', BlogSearchView.as_view(), name='search_posts'),
 ]

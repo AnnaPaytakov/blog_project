@@ -8,7 +8,7 @@ admin.site.register(Like)
 
 @admin.register(Category)
 class CategoryAdmin(TranslatableAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'created')
 
 @admin.register(Post)
 class PostAdmin(TranslatableAdmin):

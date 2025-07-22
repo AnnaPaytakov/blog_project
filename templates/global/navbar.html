@@ -29,9 +29,14 @@
 </div>
 
 <script>
-    document.getElementById('user-icon-toggle').addEventListener('click', function(e) {
-        e.preventDefault();
-        var container = this.parentElement;
-        container.classList.toggle('active');
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.getElementById('user-icon-toggle');
+        if (toggle) {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const container = this.parentElement;
+                container.classList.toggle('active');
+            });
+        }
     });
 </script>

@@ -1,12 +1,11 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const likeButtons = document.querySelectorAll("#like-btn");
 
     likeButtons.forEach(button => {
-        button.addEventListener("click", function() {
+        button.addEventListener("click", function () {
             const postId = this.getAttribute("data-id");
             const likeIcon = this.querySelector("#like-icon");
-            const likeCountOne = this.nextElementSibling;
-            const likeCountTwo = likeCountOne.nextElementSibling;
+            const likeCount = this.closest(".like-button")?.querySelector(".like-count");
 
             fetch("/toggle-like/", {
                 method: "POST",
@@ -16,17 +15,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 },
                 body: `post_id=${postId}`
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.liked) {
-                    likeIcon.classList.add("filled");
-                } else {
-                    likeIcon.classList.remove("filled");
-                }
-                likeCountOne.textContent = data.likes_count;
-                likeCountTwo.textContent = data.likes_count + 1;
-            })
-            .catch(error => console.error("Error:", error));
+                .then(response => response.json())
+                .then(data => {
+                    if (data.liked) {
+                        likeIcon.classList.add("filled");
+                    } else {
+                        likeIcon.classList.remove("filled");
+                    }
+
+                    if (likeCount) {
+                        likeCount.textContent = data.likes_count;
+                    }
+                })
+                .catch(error => console.error("Error:", error));
         });
     });
 });
