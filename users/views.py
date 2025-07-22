@@ -3,12 +3,15 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, TemplateView, FormView, UpdateView, View
 from django.urls import reverse_lazy
-from django.core.mail import send_mail
 from django.shortcuts import redirect
 from .models import Profile
 from .forms import CustomRegisterForm, AccountForm
 from blog.models import Post
+from users.utils import send_mail_async
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 #Profile we Blog ucin umumy Mixin
 class ProfileContextMixin:
@@ -59,23 +62,25 @@ class LoginUserView(TemplateView):
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect('login')
+        return redirect('blogs')
 
 class RegisterUserView(FormView):
     template_name = 'users/register.html'
     form_class = CustomRegisterForm
     success_url = reverse_lazy('blogs')
-
+    
     def form_valid(self, form):
         user = form.save(commit=False)
         user.save()
         login(self.request, user)
-
-        subject = 'Habar Blogymyza hos geldiniz!'
-        message = 'Ulgama gireniz ucin sagbolun! Biz bilen galyn!.'
-        from_email = 'paytakov.annamurad2003@gmail.com'
-        recipient_list = [user.email]
-        send_mail(subject, message, from_email, recipient_list)
+        
+        send_mail_async(
+            subject='Welcome to our News Blog!',
+            message='Thank you for your registration! Enjoy your time!',
+            from_email=os.environ.get('EMAIL_HOST_USER'),
+            recipient_list=[user.email],
+            fail_silently=True
+        )
 
         return super().form_valid(form)
     
