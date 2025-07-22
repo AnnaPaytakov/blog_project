@@ -1,14 +1,15 @@
+from rest_framework.routers import DefaultRouter
+from .views import PostViewSet, ProfileViewSet
+from .views import RegisterUserView, MeView
 from django.urls import path
-from . import views
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+
+
+router = DefaultRouter()
+
+router.register(r'blogs', PostViewSet, basename='post')
+router.register(r'users', ProfileViewSet, basename='profile')
 
 urlpatterns = [
-    path('users/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('users/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),   
-    path('', views.getRoutes),
-    path('blogs/', views.getBlogs),
-    path('blogs/<str:pk>', views.getBlog),
+    path('users/register/', RegisterUserView.as_view(), name='user-register'),
+    path('users/me/', MeView.as_view(), name='user-me'),
 ]

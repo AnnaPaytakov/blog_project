@@ -31,7 +31,11 @@ INSTALLED_APPS = [
 
     # 'django_meilisearch',
 
-    'parler'
+    'parler',
+    
+    'rest_framework',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
 ]
 
 DJANGO_MEILISEARCH = {
@@ -43,8 +47,18 @@ DJANGO_MEILISEARCH = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Blog Project API',
+    'DESCRIPTION': 'API for News Blog platform with JWT and profile editing.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

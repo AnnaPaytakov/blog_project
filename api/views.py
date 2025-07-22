@@ -1,27 +1,29 @@
-from django.http import JsonResponse
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from .serializers import PostSerializer
+from rest_framework import viewsets
 from blog.models import Post
-from rest_framework.permissions import IsAuthenticated
+from users.models import Profile
+from blog.serializers import PostSerializer
+from users.serializers import ProfileSerializer, RegisterSerializer
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
+from api.permissions import IsAdminOrReadOnly
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
-@api_view(['GET'])
-def getRoutes(request):
-    routes = [
-        {'GET': 'api/blogs'},
-        {'GET': 'api/blog/id'},
-    ]
-    return Response(routes)
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAdminOrReadOnly]
+    
+class RegisterUserView(CreateAPIView):
+    serializer_class = RegisterSerializer
+    permission_classes = [AllowAny]
+    
+class MeView(RetrieveUpdateAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getBlogs(request):
-    blogs = Post.objects.all()
-    serializer = PostSerializer(blogs, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def getBlog(request, pk):
-    blog = Post.objects.get(id=pk)
-    serializer = PostSerializer(blog, many=False)
-    return Response(serializer.data)
+    def get_object(self):
+        return self.request.user.profile
