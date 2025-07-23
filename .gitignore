@@ -7,5 +7,3 @@ venv
 !*/migrations/__init__.py
 
 __pycache__/
-
-meili_api_key.txt
