@@ -15,9 +15,6 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',')
 
-USE_MEILISEARCH = os.environ.get('USE_MEILISEARCH')
-
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,19 +26,12 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
 
-    # 'django_meilisearch',
-
     'parler',
     
     'rest_framework',
     'drf_spectacular',
     'drf_spectacular_sidecar',
 ]
-
-DJANGO_MEILISEARCH = {
-    "url": "http://meilisearch:7700",
-    "api_key": "supersecretkey123",
-}
 
 
 REST_FRAMEWORK = {

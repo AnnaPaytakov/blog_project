@@ -8,6 +8,8 @@ from .models import Post, Favorite, Category, Like
 from .forms import BlogForm, CommentForm
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
+import requests
+from django.conf import settings
 
 
 class BlogListView(ListView):
@@ -19,23 +21,37 @@ class BlogListView(ListView):
     def get_queryset(self):
         q_name = self.request.GET.get("q_name", "").strip()
         q_category = self.request.GET.get("q_category", "").strip()
-        queryset = Post.objects.language('en').all().order_by('-created_at')
 
+        if settings.USE_MEILISEARCH == "True" and q_name:
+            try:
+                response = requests.post(
+                    "http://127.0.0.1:7700/indexes/posts/search",
+                    headers={"Content-Type": "application/json"},
+                    json={"q": q_name, "limit": 50},
+                )
+                results = response.json().get("hits", [])
+                ids = [item["id"] for item in results]
+                return Post.objects.filter(id__in=ids).order_by("-created_at")
+            except Exception as e:
+                print("❌ Meilisearch error:", e)
+
+        # fallback на Django Q-поиск
+        queryset = Post.objects.all().order_by('-created_at')
         if q_name:
             queryset = queryset.filter(
-                Q(translations__title__icontains=q_name) |
-                Q(translations__content__icontains=q_name)
+                Q(title__icontains=q_name) |
+                Q(content__icontains=q_name)
             )
         if q_category:
             queryset = queryset.filter(
-                category__translations__name__icontains=q_category
+                category__name__icontains=q_category
             )
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'categories': Category.objects.language('en').all(),
+            'categories': Category.objects.all(),
             'current_language': 'en',
         })
         return context
