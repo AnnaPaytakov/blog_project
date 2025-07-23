@@ -4,12 +4,16 @@ from users.models import Profile
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from parler.models import TranslatableModel, TranslatedFields
+from parler.managers import TranslatableManager
+
 
 class Category(TranslatableModel):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     translations = TranslatedFields(name=models.CharField(max_length=100))
     slug = models.SlugField(max_length=150, unique=True, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
+    
+    objects = TranslatableManager()
 
     def __str__(self):
         return self.safe_translation_getter('name', any_language=True)
@@ -29,6 +33,8 @@ class Post(TranslatableModel):
     author = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    objects = TranslatableManager()
 
     def __str__(self):
         return self.safe_translation_getter('title', any_language=True)

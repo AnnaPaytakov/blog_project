@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
 ]
 
+USE_MEILISEARCH = os.environ.get('USE_MEILISEARCH')
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

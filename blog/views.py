@@ -3,14 +3,12 @@ from django.views.generic import ListView, DetailView, View, FormView, UpdateVie
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.urls import reverse_lazy
-from django.db.models import Q
 from .models import Post, Favorite, Category, Like
 from .forms import BlogForm, CommentForm
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
 import requests
 from django.conf import settings
-
 
 class BlogListView(ListView):
     model = Post
@@ -21,31 +19,48 @@ class BlogListView(ListView):
     def get_queryset(self):
         q_name = self.request.GET.get("q_name", "").strip()
         q_category = self.request.GET.get("q_category", "").strip()
-
-        if settings.USE_MEILISEARCH == "True" and q_name:
+        
+        #if meilisearch exists and work
+        if settings.USE_MEILISEARCH == "True" and (q_name or q_category):
             try:
+                payload = {
+                    "q": q_name,
+                    "limit": 50,
+                }
+                
+                filters = []
+                if q_category:
+                    filters.append(f'category = "{q_category}"')
+                    
+                if filters:
+                    payload["filter"] = filters
+                    
                 response = requests.post(
                     "http://127.0.0.1:7700/indexes/posts/search",
                     headers={"Content-Type": "application/json"},
-                    json={"q": q_name, "limit": 50},
+                    json=payload,
                 )
                 results = response.json().get("hits", [])
                 ids = [item["id"] for item in results]
+                
                 return Post.objects.filter(id__in=ids).order_by("-created_at")
             except Exception as e:
-                print("❌ Meilisearch error:", e)
+                print("Meilisearch error:", e)
 
-        # fallback на Django Q-поиск
+        # if meilisearch doesnt work
         queryset = Post.objects.all().order_by('-created_at')
         if q_name:
             queryset = queryset.filter(
-                Q(title__icontains=q_name) |
-                Q(content__icontains=q_name)
+                translations__title__icontains=q_name
+            ) | queryset.filter(
+                translations__content__icontains=q_name
             )
+
         if q_category:
             queryset = queryset.filter(
-                category__name__icontains=q_category
+                category__translations__name__icontains=q_category
             )
+            
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -92,7 +107,6 @@ class BlogDetailView(FormMixin, DetailView):
             return redirect(self.get_success_url())
         return self.form_invalid(form)
 
-
 class BlogCreateView(LoginRequiredMixin, FormView):
     template_name = 'blogs/blog-form.html'
     form_class = BlogForm
@@ -103,7 +117,6 @@ class BlogCreateView(LoginRequiredMixin, FormView):
         blog.author = self.request.user.profile
         blog.save()
         return super().form_valid(form)
-
 
 class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
@@ -134,7 +147,6 @@ class FavoritesView(LoginRequiredMixin, TemplateView):
         context['favorites'] = Favorite.objects.filter(user=self.request.user)
         return context
 
-
 class ToggleFavoriteView(LoginRequiredMixin, View):
     def post(self, request, pk):
         blog = get_object_or_404(Post, id=pk)
@@ -143,7 +155,6 @@ class ToggleFavoriteView(LoginRequiredMixin, View):
             favorite.delete()
             return JsonResponse({'added': False})
         return JsonResponse({'added': True})
-
 
 class ToggleLikeView(LoginRequiredMixin, View):
     def post(self, request):
