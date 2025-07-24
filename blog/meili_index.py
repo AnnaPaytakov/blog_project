@@ -14,7 +14,7 @@ MEILI_HOST = "http://localhost:7700"
 MEILI_API_KEY = os.getenv("MEILISEARCH_API_KEY", None)
 HEADERS = {"Content-Type": "application/json"}
 if MEILI_API_KEY:
-    HEADERS["X-Meili-API-Key"] = MEILI_API_KEY
+    HEADERS["Authorization"] = f"Bearer {MEILI_API_KEY}"
 
 def configure_posts_index():
     print("⚙️ Configuring filterable attributes for posts...")

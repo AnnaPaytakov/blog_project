@@ -11,7 +11,6 @@ services:
     environment:
       - DEBUG=1
       - DJANGO_SETTINGS_MODULE=blog_project.settings
-      - MEILI_MASTER_KEY=supersecretkey123
     depends_on:
       - meilisearch
     networks:
