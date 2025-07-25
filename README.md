@@ -19,6 +19,7 @@ A full-featured blog platform built with Django, offering a clean UI, modern API
 
 - Python
 - Django
+- Django REST framework
 - MeiliSearch
 - Docker & Docker Compose
 - GitHub Actions (CI/CD)
