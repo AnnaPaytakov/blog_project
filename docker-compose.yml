@@ -11,6 +11,9 @@ services:
     environment:
       - DEBUG=1
       - DJANGO_SETTINGS_MODULE=blog_project.settings
+      - USE_MEILISEARCH=True
+      - MEILI_HOST=http://meilisearch:7700
+      - MEILISEARCH_API_KEY=supersecretkey123
     depends_on:
       - meilisearch
     networks:

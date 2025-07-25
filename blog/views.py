@@ -8,6 +8,7 @@ from .forms import BlogForm, CommentForm
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
 import requests
+import os
 from django.conf import settings
 
 class BlogListView(ListView):
@@ -23,6 +24,13 @@ class BlogListView(ListView):
         #if meilisearch exists and work
         if settings.USE_MEILISEARCH == "True" and (q_name or q_category):
             try:
+                
+                meili_host = os.getenv("MEILI_HOST", "http://127.0.0.1:7700")
+                api_key = os.getenv("MEILISEARCH_API_KEY")
+                headers = {"Content-Type": "application/json"}
+                if api_key:
+                    headers["Authorization"] = f"Bearer {api_key}"
+                
                 payload = {
                     "q": q_name,
                     "limit": 50,
@@ -36,8 +44,8 @@ class BlogListView(ListView):
                     payload["filter"] = filters
                     
                 response = requests.post(
-                    "http://127.0.0.1:7700/indexes/posts/search",
-                    headers={"Content-Type": "application/json"},
+                    f"{meili_host}/indexes/posts/search",
+                    headers=headers,
                     json=payload,
                 )
                 results = response.json().get("hits", [])
