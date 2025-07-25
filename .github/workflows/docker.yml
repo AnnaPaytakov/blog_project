@@ -3,6 +3,11 @@ name: Build and Push to Docker Hub
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'README.md'
+      - '.dockerignore'
+      - '.gitignore'
+      - '.github/**.md'
 
 jobs:
   build-and-push:
