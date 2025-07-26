@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import sys
+from datetime import timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -29,6 +30,9 @@ INSTALLED_APPS = [
     'parler',
     
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+    
     'drf_spectacular',
     'drf_spectacular_sidecar',
 ]
@@ -43,6 +47,12 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+}
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Blog Project API',
