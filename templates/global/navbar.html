@@ -1,0 +1,42 @@
+
+{% load static %}
+
+<div class="navbar">
+    <div class="logo-container">
+        <a href="{% url 'blogs' %}" class="logo-link">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+            <p class="logo-txt">NEWS BLOG</p>
+        </a>
+    </div>
+
+    <div class="user-icon-container">
+    {% if request.user.is_authenticated %}
+    <a href="#" class="user-icon-link" id="user-icon-toggle">
+        <img src="{{ request.user.profile.profile_image.url }}" alt="User Icon" class="user-icon">
+        <span class="dropdown-arrow">▼</span>
+    </a>
+    <ul class="user-dropdown" id="user-dropdown">
+        <li><a href="{% url 'account' %}">Profile</a></li>
+        <li><a href="{% url 'user-favorites' %}">Your Favorites</a></li>
+        <li><a href="{% url 'logout' %}">Log out</a></li>
+    </ul>
+    {% else %}
+    <a href="{% url 'account' %}" class="user-icon-link">
+        <img src="{% static 'images/user-icon.png' %}" alt="User Icon" class="user-icon">
+    </a>
+    {% endif %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.getElementById('user-icon-toggle');
+        if (toggle) {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const container = this.parentElement;
+                container.classList.toggle('active');
+            });
+        }
+    });
+</script>

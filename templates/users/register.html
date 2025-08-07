@@ -1,0 +1,30 @@
+{% extends 'global/main.html' %}
+{% load static %}
+{% block content %}
+<div class="register-wrap">
+    <div class="register-form">
+        <form action="" method="POST" class="custom-form">
+            {% csrf_token %}
+
+            <a href="{% url 'login' %}" class="close-button">X</a>
+
+            <h2>Sign up</h2>
+
+            {% for field in form %}
+                {{field}}
+
+                {% for error in field.errors %}
+                    <p style="color: red">{{error}}</p>
+                {% endfor %}
+                
+            {% endfor %}
+            <div class="show-pswd"><input type="checkbox" id="togglePassword">Show password</div>
+            <input type="submit" value="Create">
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block for_script %}
+<script src="{% static 'js/show-password1.js' %}"></script>
+{% endblock %}
