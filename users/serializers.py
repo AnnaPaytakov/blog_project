@@ -32,7 +32,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         validated_data.pop('password_confirm')
         user = User.objects.create_user(**validated_data)
         
-        # Создаем профиль для пользователя
+        #* Создаем профиль для пользователя
         Profile.objects.create(
             user=user,
             email=user.email,
