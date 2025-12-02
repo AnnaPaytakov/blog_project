@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-#Profile we Blog ucin umumy Mixin
+#* Profile we Blog ucin umumy Mixin
 class ProfileContextMixin:
     def get_profile(self):
         raise NotImplementedError("Basga classlarda get_profile() berilmedik")
@@ -24,6 +24,7 @@ class ProfileContextMixin:
         context['profile'] = profile
         context['all_blogs'] = Post.objects.filter(author=profile)
         return context
+    
 
 class ProfileDetailView(ProfileContextMixin, DetailView):
     model = Profile
@@ -32,6 +33,7 @@ class ProfileDetailView(ProfileContextMixin, DetailView):
 
     def get_profile(self):
         return self.get_object()
+    
 
 class UserAccountView(LoginRequiredMixin, ProfileContextMixin, TemplateView):
     template_name = 'users/account.html'
@@ -39,6 +41,7 @@ class UserAccountView(LoginRequiredMixin, ProfileContextMixin, TemplateView):
 
     def get_profile(self):
         return self.request.user.profile
+    
 
 class LoginUserView(TemplateView):
     template_name = 'users/login.html'
@@ -58,11 +61,13 @@ class LoginUserView(TemplateView):
             return redirect('blogs')
         messages.error(request, 'Adynyz yada parolynyz nadogry!')
         return self.get(request, *args, **kwargs)
+    
 
 class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('blogs')
+
 
 class RegisterUserView(FormView):
     template_name = 'users/register.html'
@@ -84,6 +89,7 @@ class RegisterUserView(FormView):
 
         return super().form_valid(form)
     
+    
 class EditAccountView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = AccountForm
@@ -101,5 +107,8 @@ class EditAccountView(LoginRequiredMixin, UpdateView):
     def form_invalid(self, form):
         messages.error(self.request, 'Maglumatlary dogry dolduruň!')
         return super().form_invalid(form)
+    
+
 class ForgotPasswordView(TemplateView):
     template_name = 'users/forgot-password.html'
+    
