@@ -1,14 +1,14 @@
 import os
 import sys
 import requests
+from blog.models import Post, Category
+import django
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "blog_project.settings")
-import django
 django.setup()
 
-from blog.models import Post, Category
 
 MEILI_HOST = "http://localhost:7700"
 MEILI_API_KEY = os.getenv("MEILISEARCH_API_KEY", None)
