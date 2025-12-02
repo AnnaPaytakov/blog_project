@@ -5,9 +5,6 @@ from .models import Profile
 from django.forms import ModelForm
 from django.forms.widgets import ClearableFileInput
 from django.utils.translation import gettext_lazy as _
-from django.utils.timezone import now
-from datetime import timedelta
-import uuid
 
 
 class CustomClearableFileInput(ClearableFileInput):
